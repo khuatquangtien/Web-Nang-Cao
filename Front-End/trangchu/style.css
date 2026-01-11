@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* TOP BAR */
+.topbar {
+  background: #1ba0e2;
+  color: white;
+  padding: 6px 30px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.topbar a {
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+  color: #1ba0e2;
+}
+
+.header nav a {
+  margin: 0 15px;
+  cursor: pointer;
+}
+
+.promo {
+  color: orange;
+  font-weight: bold;
+}
+
+.register {
+  margin-left: 15px;
+  color: #1ba0e2;
+  font-weight: bold;
+}
+
+/* BANNER */
+.banner {
+  display: flex;
+  justify-content: space-between;
+  padding: 50px;
+  background: linear-gradient(to right, #1ba0e2, #33c3f0);
+  color: white;
+}
+
+.banner-left h2 {
+  font-size: 80px;
+  margin: 0;
+}
+
+/* COUPON */
+.coupon {
+  background: white;
+  color: black;
+  padding: 30px;
+  border-radius: 10px;
+  width: 260px;
+}
+
+.coupon button {
+  background: orange;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  color: white;
+  cursor: pointer;
+}
+
+/* SERVICES */
+.services {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px;
+}
+
+.services button {
+  padding: 15px 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
