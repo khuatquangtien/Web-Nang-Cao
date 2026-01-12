@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Travel Booking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<section class="hero">
+  <h1>Du lịch khắp Việt Nam</h1>
+  <p>Ưu đãi tour hấp dẫn – Đặt ngay hôm nay</p>
+  <input type="text" placeholder="Tìm tour, địa điểm..." id="searchInput">
+</section>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">traveloka</div>
+  <input type="text" id="searchInput" placeholder="Tìm tour..." />
+</header>
+
+<!-- TRANG CHỦ -->
+<div id="home" class="container">
+  <h2>Tour nổi bật</h2>
+  <div id="tourList" class="tour-list"></div>
+</div>
+
+<!-- TRANG CHI TIẾT -->
+<div id="detail" class="container hidden">
+  <button class="back-btn" onclick="goHome()">← Quay lại</button>
+  <div id="detailContent"></div>
+</div>
+
+<script src="script.js"></script>
+<footer class="footer">
+  <div class="footer-container">
+    <div>
+      <h3>Travel Booking</h3>
+      <p>Đặt tour du lịch dễ dàng – giá tốt mỗi ngày</p>
+    </div>
+
+    <div>
+      <h4>Liên hệ</h4>
+      <p>Email: support@travel.com</p>
+      <p>Hotline: 1900 1234</p>
+    </div>
+
+    <div>
+      <h4>Thông tin</h4>
+      <p>Giới thiệu</p>
+      <p>Điều khoản</p>
+      <p>Chính sách</p>
+    </div>
+  </div>
+
+  <p class="copyright">
+    © 2026 Travel Booking. All rights reserved.
+  </p>
+</footer>
+
+
+</body>
+</html>
