@@ -1,109 +1,73 @@
-import React, { useState } from 'react';
-import { register } from '../services/authService';
-import '../Auth.css'; 
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function Register() {
-  const [form, setForm] = useState({
+import "../styles/login.css"; // (Nếu bạn chưa có file css thì tạo sau cũng được)
+import userIcon from "../assets/images/user.png"; // Thay bằng ảnh icon user của bạn hoặc xóa dòng này
+
+const Register = () => {
+  const navigate = useNavigate();
+  
+  const [credentials, setCredentials] = useState({
     username: "",
     email: "",
-    fullName: "",
-    password: ""
+    password: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false);
+  const handleChange = (e) => {
+    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  };
 
-  const handleSubmit = async (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    
-    
-    for (let key in form) {
-      if (!form[key]) {
-        alert("Vui lòng điền đầy đủ thông tin!");
-        return;
-      }
-    }
-
     try {
-      await register(form); 
-      alert("Đăng ký thành công! Chào mừng " + form.fullName);
-      window.location.href = "/login"; 
+      // Gọi API đăng ký (kiểm tra lại đường dẫn Backend của bạn xem là /auth/register hay /users/register)
+      const res = await axios.post("http://localhost:9090/auth/register", credentials);
+
+      if (res.status === 200 || res.status === 201) {
+        alert("✅ Đăng ký thành công! Vui lòng đăng nhập.");
+        navigate("/login");
+      }
     } catch (err) {
-      alert("Đăng ký thất bại, tên đăng nhập hoặc email có thể đã tồn tại!");
+      alert("❌ Đăng ký thất bại. Tên đăng nhập hoặc Email có thể đã tồn tại.");
+      console.error(err);
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2 className="auth-title">Đăng ký tài khoản</h2>
-        
-        <form onSubmit={handleSubmit}>
-          
-          {/* Tên đăng nhập */}
-          <div className="form-group">
-            <label>Tên đăng nhập <span className="text-red">*</span></label>
-            <input 
-              type="text" 
-              placeholder="Nhập tên đăng nhập" 
-              value={form.username}
-              onChange={(e) => setForm({...form, username: e.target.value})} 
-            />
-          </div>
-
-          {/* Email */}
-          <div className="form-group">
-            <label>Email <span className="text-red">*</span></label>
-            <input 
-              type="email" 
-              placeholder="Nhập địa chỉ email" 
-              value={form.email}
-              onChange={(e) => setForm({...form, email: e.target.value})} 
-            />
-          </div>
-
-          {/* Họ và tên */}
-          <div className="form-group">
-            <label>Họ và tên <span className="text-red">*</span></label>
-            <input 
-              type="text" 
-              placeholder="Nhập họ và tên đầy đủ" 
-              value={form.fullName}
-              onChange={(e) => setForm({...form, fullName: e.target.value})} 
-            />
-          </div>
-
-          {/* Mật khẩu (Có nút ẩn/hiện) */}
-          <div className="form-group">
-            <label>Mật khẩu <span className="text-red">*</span></label>
-            <div className="input-wrapper">
-              <input 
-                type={showPassword ? "text" : "password"} 
-                placeholder="Nhập mật khẩu" 
-                value={form.password}
-                onChange={(e) => setForm({...form, password: e.target.value})} 
-              />
-              <span 
-                className="toggle-password"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{ fontSize: '12px', fontWeight: 'bold', userSelect: 'none' }}
-              >
-                {showPassword ? "ẨN" : "HIỆN"}
-              </span>
+    <section className="login-section">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-5 col-md-8">
+            <div className="login-container shadow p-5 rounded bg-white mt-5">
+              <h2 className="text-center fw-bold mb-4">Đăng Ký</h2>
+              
+              <form onSubmit={handleClick}>
+                <div className="mb-3">
+                  <input type="text" placeholder="Tên đăng nhập" id="username" 
+                    className="form-control" required onChange={handleChange} />
+                </div>
+                <div className="mb-3">
+                  <input type="email" placeholder="Email" id="email" 
+                    className="form-control" required onChange={handleChange} />
+                </div>
+                <div className="mb-3">
+                  <input type="password" placeholder="Mật khẩu" id="password" 
+                    className="form-control" required onChange={handleChange} />
+                </div>
+                
+                <button type="submit" className="btn btn-primary w-100 mb-3">Tạo tài khoản</button>
+                
+                <p className="text-center">
+                  Đã có tài khoản? <Link to="/login">Đăng nhập ngay</Link>
+                </p>
+              </form>
             </div>
           </div>
-
-          {/* Nút Đăng ký */}
-          <button type="submit" className="btn-primary">ĐĂNG KÝ NGAY</button>
-        </form>
-
-        {/* Link chuyển qua đăng nhập */}
-        <div className="auth-link" style={{ textAlign: 'center', marginTop: '20px' }}>
-           Bạn đã có tài khoản ? <a href="/login">Đăng nhập tại đây</a>
         </div>
-
       </div>
-    </div>
+    </section>
   );
-}
+};
 
 export default Register;

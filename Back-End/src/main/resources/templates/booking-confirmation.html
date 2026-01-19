@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Xác nhận đặt tour</title>
+    <style>
+        body { font-family: Arial, sans-serif; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+        .header { background-color: #faa935; padding: 20px; text-align: center; color: white; border-radius: 10px 10px 0 0; }
+        .content { padding: 20px; }
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .info-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .info-table td:first-child { font-weight: bold; width: 40%; }
+        .footer { margin-top: 20px; font-size: 12px; color: #777; text-align: center; border-top: 1px solid #ddd; padding-top: 10px; }
+        .highlight { color: #faa935; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>XÁC NHẬN ĐẶT TOUR</h1>
+        </div>
+        <div class="content">
+            <p>Xin chào <span th:text="${name}" class="highlight">Tên Khách</span>,</p>
+            <p>Cảm ơn bạn đã tin tưởng TravelApp. Chúng tôi đã nhận được yêu cầu đặt tour của bạn.</p>
+            
+            <h3>📦 Thông tin đơn hàng:</h3>
+            <table class="info-table">
+                <tr>
+                    <td>Tour du lịch:</td>
+                    <td th:text="${tourName}">Tên Tour</td>
+                </tr>
+                <tr>
+                    <td>Ngày khởi hành:</td>
+                    <td th:text="${bookingDate}">01/01/2024</td>
+                </tr>
+                <tr>
+                    <td>Số lượng khách:</td>
+                    <td th:text="${guestSize} + ' người'">2 người</td>
+                </tr>
+                <tr>
+                    <td>Tổng tạm tính:</td>
+                    <td th:text="${price} + ' VND'">5.000.000 VND</td>
+                </tr>
+            </table>
+
+            <div style="background-color: #f9f9f9; padding: 15px; margin-top: 20px; border-left: 4px solid #faa935;">
+                <strong>ℹ️ Bước tiếp theo:</strong><br>
+                Đội ngũ tư vấn viên của chúng tôi sẽ liên hệ với bạn qua số điện thoại trong vòng <strong>24h làm việc</strong> để xác nhận lịch trình chi tiết và hướng dẫn thanh toán.
+            </div>
+        </div>
+        <div class="footer">
+            <p>Đây là email tự động, vui lòng không trả lời email này.</p>
+            <p>Hotline hỗ trợ: 1900 xxxx</p>
+        </div>
+    </div>
+</body>

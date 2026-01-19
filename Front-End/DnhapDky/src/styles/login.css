@@ -1,0 +1,18 @@
+/* src/styles/login.css */
+.login__img img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.login__form {
+  background: #fff;
+  padding: 40px;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.user_icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,15 @@
+/* src/styles/booking.css */
+.booking__form {
+  padding: 20px;
+  border-radius: 5px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
+.booking__input input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}

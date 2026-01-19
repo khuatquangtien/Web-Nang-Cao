@@ -1,18 +1,20 @@
 package TravelBooking.repository;
 
 import TravelBooking.entity.Tour;
-
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface TourRepository extends JpaRepository<Tour, Long> {
-    // Có thể thêm tìm kiếm theo địa điểm sau này:
-    // List<Tour> findByDestination(String destination);
-	List<Tour> findByTitleContainingIgnoreCase(String keyword);
+
+    // 1. Lấy danh sách tour nổi bật
+    List<Tour> findByFeaturedTrue();
+
+    List<Tour> findByCityContainingIgnoreCase(String city);
     
-    // Hoặc tìm theo địa điểm
-    List<Tour> findByDestinationContainingIgnoreCase(String destination);
+    // Hoặc giữ nguyên tìm theo Title như cũ (khuyên dùng cái này cho ô tìm kiếm chung)
+    List<Tour> findByTitleContainingIgnoreCase(String keyword);
+    
+    //
 }

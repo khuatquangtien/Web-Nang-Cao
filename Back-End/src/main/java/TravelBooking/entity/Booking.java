@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Min;
 
 import java.time.LocalDate; // Nhớ import cái này để dùng ngày tháng
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "bookings")
 public class Booking {
@@ -22,7 +24,8 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "tour_id", nullable = false)
     private Tour tour; // Đặt tour nào?
-
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate bookingDate; // Ngày đặt (YYYY-MM-DD)
     
     @Min(value = 1, message = "Số người phải ít nhất là 1") // Phải >= 1

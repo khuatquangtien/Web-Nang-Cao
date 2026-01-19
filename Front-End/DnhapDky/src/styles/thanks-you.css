@@ -1,0 +1,16 @@
+.thank__you span i {
+  font-size: 5rem;
+  color: #008000; /* Màu xanh lá cây */
+}
+
+.thank__you h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #0b2727;
+}
+
+.thank__you h3 {
+  font-size: 1.5rem;
+  color: #0b2727;
+  font-weight: 500;
+}
