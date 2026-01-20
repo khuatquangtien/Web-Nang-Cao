@@ -41,7 +41,7 @@ public class EmailService {
             helper.setText(htmlContent, true); // true = gửi dưới dạng HTML
             
             // 👇 Thay email này bằng email bạn đã cấu hình trong application.properties
-            helper.setFrom("TravelApp <email_cua_ban@gmail.com>");
+            helper.setFrom("TravelApp <khuattien05@gmail.com>");
 
             // 4. Gửi
             mailSender.send(message);

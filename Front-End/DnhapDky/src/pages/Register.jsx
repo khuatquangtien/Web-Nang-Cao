@@ -1,72 +1,139 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
-import "../styles/login.css"; // (Nếu bạn chưa có file css thì tạo sau cũng được)
-import userIcon from "../assets/images/user.png"; // Thay bằng ảnh icon user của bạn hoặc xóa dòng này
+import "../styles/register-custom.css"; // 👈 Import file CSS mới tạo
 
 const Register = () => {
   const navigate = useNavigate();
   
+  // State lưu dữ liệu form
   const [credentials, setCredentials] = useState({
     username: "",
+    fullName: "",
+    phone: "",
     email: "",
     password: "",
   });
+
+  // State để ẩn/hiện mật khẩu
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
-    try {
-      // Gọi API đăng ký (kiểm tra lại đường dẫn Backend của bạn xem là /auth/register hay /users/register)
-      const res = await axios.post("http://localhost:9090/auth/register", credentials);
+    
+    // Validate đơn giản
+    if(!credentials.username || !credentials.email || !credentials.password || !credentials.phone) {
+        alert("Vui lòng điền đầy đủ các trường bắt buộc!");
+        return;
+    }
 
+    try {
+      const res = await axios.post("http://localhost:9090/users/register", credentials);
       if (res.status === 200 || res.status === 201) {
-        alert("✅ Đăng ký thành công! Vui lòng đăng nhập.");
+        alert("✅ Đăng ký thành công!");
         navigate("/login");
       }
     } catch (err) {
-      alert("❌ Đăng ký thất bại. Tên đăng nhập hoặc Email có thể đã tồn tại.");
-      console.error(err);
+      alert(err.response?.data?.message || "❌ Đăng ký thất bại. Kiểm tra lại thông tin!");
     }
   };
 
   return (
-    <section className="login-section">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-5 col-md-8">
-            <div className="login-container shadow p-5 rounded bg-white mt-5">
-              <h2 className="text-center fw-bold mb-4">Đăng Ký</h2>
-              
-              <form onSubmit={handleClick}>
-                <div className="mb-3">
-                  <input type="text" placeholder="Tên đăng nhập" id="username" 
-                    className="form-control" required onChange={handleChange} />
-                </div>
-                <div className="mb-3">
-                  <input type="email" placeholder="Email" id="email" 
-                    className="form-control" required onChange={handleChange} />
-                </div>
-                <div className="mb-3">
-                  <input type="password" placeholder="Mật khẩu" id="password" 
-                    className="form-control" required onChange={handleChange} />
-                </div>
-                
-                <button type="submit" className="btn btn-primary w-100 mb-3">Tạo tài khoản</button>
-                
-                <p className="text-center">
-                  Đã có tài khoản? <Link to="/login">Đăng nhập ngay</Link>
-                </p>
-              </form>
-            </div>
+    <div className="register-section">
+      <div className="register-card">
+        <h2 className="register-title">Đăng ký tài khoản</h2>
+        
+        <form onSubmit={handleClick}>
+          
+          {/* 1. Tên đăng nhập (Bắt buộc theo DB) */}
+          <div className="form-group">
+            <label className="form-label">Tên đăng nhập <span className="required-star">*</span></label>
+            <input 
+              type="text" 
+              id="username"
+              className="form-input" 
+              placeholder="Nhập tên đăng nhập (viết liền)"
+              onChange={handleChange}
+              required
+            />
           </div>
-        </div>
+
+          {/* 2. Số điện thoại */}
+          <div className="form-group">
+            <label className="form-label">Số điện thoại <span className="required-star">*</span></label>
+            <input 
+              type="text" 
+              id="phone"
+              className="form-input" 
+              placeholder="Nhập số điện thoại"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* 3. Email */}
+          <div className="form-group">
+            <label className="form-label">Email <span className="required-star">*</span></label>
+            <input 
+              type="email" 
+              id="email"
+              className="form-input" 
+              placeholder="Nhập địa chỉ email"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* 4. Họ và tên */}
+          <div className="form-group">
+            <label className="form-label">Họ và tên <span className="required-star">*</span></label>
+            <input 
+              type="text" 
+              id="fullName"
+              className="form-input" 
+              placeholder="Nhập họ và tên đầy đủ"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* 5. Mật khẩu + Nút HIỆN */}
+          <div className="form-group">
+            <label className="form-label">Mật khẩu <span className="required-star">*</span></label>
+            <input 
+              type={showPassword ? "text" : "password"} 
+              id="password"
+              className="form-input" 
+              placeholder="Nhập mật khẩu"
+              onChange={handleChange}
+              required
+            />
+            <button type="button" className="password-toggle" onClick={togglePassword}>
+              {showPassword ? "ẨN" : "HIỆN"}
+            </button>
+          </div>
+
+          {/* Button Submit */}
+          <button type="submit" className="btn-submit">
+            Đăng ký ngay
+          </button>
+
+          {/* Footer Link */}
+          <div className="register-footer">
+            Bạn đã có tài khoản? <Link to="/login">Đăng nhập tại đây</Link>
+          </div>
+
+        </form>
       </div>
-    </section>
+    </div>
   );
 };
 

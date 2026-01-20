@@ -57,10 +57,10 @@ function Login() {
         <form onSubmit={handleSubmit}>
           {/* Username Input */}
           <div className="form-group">
-            <label>Số điện thoại hoặc email <span className="text-red">*</span></label>
+            <label>Tên đăng nhập <span className="text-red">*</span></label>
             <input 
               type="text"
-              placeholder="Nhập số điện thoại hoặc email" 
+              placeholder="Tên đăng nhập" 
               value={username} 
               onChange={(e) => setUsername(e.target.value)} 
               disabled={isLoading}

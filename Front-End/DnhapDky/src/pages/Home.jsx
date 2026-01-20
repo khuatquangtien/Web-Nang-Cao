@@ -33,7 +33,7 @@ const HomePage = () => {
         <div className="container mt-4">
             {/* --- PHẦN BANNER & TÌM KIẾM --- */}
             <div className="bg-primary p-5 text-white rounded mb-4">
-                <h1>Du lịch dễ dàng cùng Trip.com Clone</h1>
+                <h1>Du lịch dễ dàng cùng Trip.com </h1>
                 <div className="card p-3 text-dark mt-3">
                     <div className="row g-2">
                         <div className="col-md-8">
@@ -66,9 +66,14 @@ const HomePage = () => {
                         <div className="card h-100 shadow-sm">
                             {/* Nếu có ảnh thì hiện, không có thì dùng ảnh mẫu */}
                             <img 
-                                src="https://via.placeholder.com/300x200" 
+                                src={tour.image ? tour.image : "https://via.placeholder.com/300x200"}
                                 className="card-img-top" 
                                 alt={tour.title} 
+                                onError={(e) => {
+                                e.target.onerror = null; 
+                                e.target.src = "https://via.placeholder.com/300x200";
+                                }
+                              }
                             />
                             <div className="card-body">
                                 <h5 className="card-title">{tour.title}</h5>

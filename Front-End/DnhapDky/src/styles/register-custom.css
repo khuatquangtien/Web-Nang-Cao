@@ -1,0 +1,114 @@
+/* register-custom.css */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+.register-section {
+  background-color: #f8f9fa; /* Nền xám nhạt toàn màn hình */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Roboto", sans-serif;
+}
+
+.register-card {
+  background: white;
+  width: 100%;
+  max-width: 500px; /* Độ rộng vừa phải */
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+}
+
+.register-title {
+  color: #0056b3; /* Màu xanh đậm */
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative; /* Để căn chỉnh nút Hiện pass */
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.required-star {
+  color: red;
+  margin-left: 3px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  border-color: #0056b3; /* Viền xanh khi bấm vào */
+}
+
+/* Nút HIỆN mật khẩu */
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 40px; /* Căn chỉnh tùy theo chiều cao label */
+  font-size: 13px;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-transform: uppercase;
+}
+
+.password-toggle:hover {
+  color: #0056b3;
+}
+
+.btn-submit {
+  width: 100%;
+  background-color: #0056b3; /* Màu xanh chủ đạo */
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  text-transform: uppercase;
+  transition: background 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #004494;
+}
+
+.register-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.register-footer a {
+  color: #0056b3;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
+}

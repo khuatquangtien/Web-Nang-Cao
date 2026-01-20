@@ -9,6 +9,7 @@ import MyBookings from "./pages/MyBookings";
 import TourDetail from './pages/TourDetail';
 import Booking from './pages/Booking';
 import ThankYou from './pages/ThankYou'; // <--- 1. Import vào đây
+import Admin from "./pages/Admin";
 
 // --- Layout chung (Có Header) ---
 const MainLayout = () => {
@@ -45,7 +46,7 @@ function App() {
         {/* === NHÓM 2: CÁC TRANG KHÔNG CÓ HEADER (Riêng lẻ) === */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+        <Route path="/admin" element={<Admin />} />
         {/* Trang Booking (nếu cần header thì đưa lên trên, nếu không thì để đây) */}
         {/* Thường booking cũng cần biết đang book tour nào, nên đặt là /tours/:id/book */}
         <Route path="/tours/:id/book" element={<Booking />} />   

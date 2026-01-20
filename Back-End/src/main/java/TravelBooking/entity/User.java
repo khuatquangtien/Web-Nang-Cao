@@ -20,7 +20,8 @@ public class User {
     private String email;
 
     private String fullName;
-
+    
+    private String phone;
     // --- Constructor không tham số (Bắt buộc cho JPA) ---
     public User() {
     }
@@ -49,4 +50,12 @@ public class User {
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 }
