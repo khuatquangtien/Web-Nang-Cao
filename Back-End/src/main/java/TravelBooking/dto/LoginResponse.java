@@ -5,13 +5,16 @@ public class LoginResponse {
     private String username;
     private String message;
     private Long id;
+    private String role; // ✅ THÊM
+
 
     // Constructor để tạo nhanh
-    public LoginResponse(String token, String username, String message, Long id) {
+    public LoginResponse(String token, String username, String message, Long id, String role) {
         this.token = token;
         this.username = username;
         this.message = message;
         this.id = id;
+        this.role = role;
     }
 
     public Long getId() {

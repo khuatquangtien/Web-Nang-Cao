@@ -13,7 +13,7 @@ const Sidebar = () => {
   return (
     <div>
       {menuItems.map((item, index) => (
-        <div key={index} className={`sidebar-item ${item.active ? 'active' : ''}`}>
+        <div key={index} className={`sidebar-item ${item.active ? 'active' : ''}`} style={{ fontSize: "18px" }}>
           <i className={item.icon}></i>
           <span>{item.text}</span>
         </div>

@@ -1,13 +1,15 @@
 package TravelBooking.service; // 👈 Đảm bảo dòng này giống tên package của bạn
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import TravelBooking.repository.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class EmailService {
@@ -17,7 +19,10 @@ public class EmailService {
 
     @Autowired
     private TemplateEngine templateEngine;
-
+    
+    @Autowired
+    private UserRepository userRepository;
+    
     // Hàm gửi email HTML
     public void sendHtmlEmail(String to, String subject, String name, String tourName, String date, int guestSize, double price) {
         try {
@@ -28,7 +33,7 @@ public class EmailService {
             context.setVariable("bookingDate", date);
             context.setVariable("guestSize", guestSize);
             context.setVariable("price", price);
-
+           
             // 2. Nạp file HTML template (tên file là booking-confirmation.html)
             String htmlContent = templateEngine.process("booking-confirmation", context);
 
@@ -51,4 +56,5 @@ public class EmailService {
             System.err.println("Lỗi gửi mail: " + e.getMessage());
         }
     }
+    
 }

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import '../styles/booking.css';
 import { BASE_URL } from "../utils/config"; 
 
+// chức năng đánh giá review
+
 const Booking = ({ tour, avgRating }) => {
   // Lấy các thông tin cần thiết từ props tour
   const { price, reviews, title, id } = tour || {}; 
@@ -104,7 +106,7 @@ const Booking = ({ tour, avgRating }) => {
     <div className="booking">
       <div className="booking__top d-flex align-items-center justify-content-between">
         <h3>
-          ${price} <span>/người</span>
+          {price}VNĐ <span>/người</span>
         </h3>
         <span className="tour__rating d-flex align-items-center">
           <i className="bi bi-star-fill"></i>
@@ -163,17 +165,17 @@ const Booking = ({ tour, avgRating }) => {
         <ListGroup>
           <ListGroupItem className="border-0 px-0 d-flex justify-content-between">
             <h5 className="d-flex align-items-center gap-1">
-              ${price} <i className="bi bi-x-lg"></i> {credentials.guestSize} người
+              {price} VNĐ <i className="bi bi-x-lg"></i> {credentials.guestSize} người
             </h5>
-            <span>${(Number(price) * Number(credentials.guestSize)).toLocaleString()}</span>
+            <span>{(Number(price) * Number(credentials.guestSize)).toLocaleString()} VNĐ</span>
           </ListGroupItem>
           <ListGroupItem className="border-0 px-0 d-flex justify-content-between">
             <h5>Phí dịch vụ</h5>
-            <span>${serviceFee}</span>
+            <span>{serviceFee.toLocaleString()} VNĐ</span>
           </ListGroupItem>
           <ListGroupItem className="border-0 px-0 total d-flex justify-content-between">
             <h5>Tổng cộng</h5>
-            <span>${totalAmount.toLocaleString()}</span>
+            <span>{totalAmount.toLocaleString()} VNĐ</span>
           </ListGroupItem>
         </ListGroup>
 

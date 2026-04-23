@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/api/test")
-@CrossOrigin(origins = "*") // Cho phép React gọi thoải mái (tạm thời)
+//@CrossOrigin(origins = "*") // Cho phép React gọi thoải mái (tạm thời)
 public class TestController {
 
     @GetMapping

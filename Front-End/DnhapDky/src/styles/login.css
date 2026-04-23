@@ -16,3 +16,8 @@
   height: 50px;
   margin-bottom: 20px;
 }
+.auth-link {
+  margin-top: 0px;
+  color: #007bff;
+  text-decoration: none;
+}

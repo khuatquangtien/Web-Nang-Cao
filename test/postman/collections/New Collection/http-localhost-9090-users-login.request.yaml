@@ -1,0 +1,37 @@
+$kind: http-request
+name: http://localhost:9090/users/login
+url: http://localhost:9090/users/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"username\": \"{{username}}\",\r
+
+    \    \"password\": \"{{password}}\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "var expectedStatus = parseInt(data.expected_status);\r
+
+      \r
+
+      pm.test(data.testcase + \": Mã trạng thái HTTP phải là \" +
+      expectedStatus, function () {\r
+
+      \    pm.response.to.have.status(expectedStatus);\r
+
+      });\r
+
+      \r
+
+      pm.test(data.testcase + \": Thông báo trả về đúng chuẩn\", function () {\r
+
+      \    var responseText = pm.response.text();\r
+
+      \    pm.expect(responseText).to.include(data.expected_message);\r
+
+      });"
+    language: text/javascript
+order: 1774430895151

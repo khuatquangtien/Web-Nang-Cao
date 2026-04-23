@@ -1,0 +1,11 @@
+testcase,username,password,expected_status,expected_message
+TC_01,admin,123,200,Đăng nhập thành công!
+TC_02,admin,wrongpass,401,Sai tên đăng nhập hoặc mật khẩu!
+TC_03,khongtontai,123,401,Sai tên đăng nhập hoặc mật khẩu!
+TC_04,,123,401,Sai tên đăng nhập hoặc mật khẩu!
+TC_05,admin,,401,Sai tên đăng nhập hoặc mật khẩu!
+TC_06,,,401,Sai tên đăng nhập hoặc mật khẩu!
+TC_07, admin    ,123,401,Sai tên đăng nhập hoặc mật khẩu!
+TC_08,' OR 1=1 --,123,401,Sai tên đăng nhập hoặc mật khẩu!
+TC_09,admin,' OR 1=1 --,401,Sai tên đăng nhập hoặc mật khẩu!
+TC_10,admin@gmail.com,123,401,Sai tên đăng nhập hoặc mật khẩu!

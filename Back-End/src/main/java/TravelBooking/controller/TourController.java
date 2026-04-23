@@ -19,7 +19,7 @@ import TravelBooking.repository.TourRepository;
 
 @RestController
 @RequestMapping("/tours")
-@CrossOrigin(origins = "http://localhost:3000")
+
 public class TourController {
 
     @Autowired
@@ -43,7 +43,6 @@ public class TourController {
         // Lưu ý: Đảm bảo bên Repository đã có hàm findByTitleContainingIgnoreCase
         return tourRepository.findByTitleContainingIgnoreCase(keyword);
     }
-
     // 4. Tìm kiếm lấy các tour nổi bật
     @GetMapping("/search/getFeaturedTours")
     public List<Tour> getFeaturedTours(){

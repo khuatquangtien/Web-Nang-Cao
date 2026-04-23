@@ -1,6 +1,8 @@
 package TravelBooking.entity;
 
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity // Đánh dấu đây là một bảng trong Database
@@ -16,13 +18,30 @@ public class User {
 
     @Column(nullable = false)
     private String password;
-
+    
+    @Column(name = "email", nullable  = false, unique = true)
     private String email;
 
     private String fullName;
     
     private String phone;
-    // --- Constructor không tham số (Bắt buộc cho JPA) ---
+    
+    @Column(name ="otp_code")
+    private String otpCode;
+    
+    @Column(name = "otp_expiry_time")
+    private LocalDateTime otpExpiryTime;// thờii gian sau khi kết thúc
+    
+    private String role;
+    public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	// --- Constructor không tham số (Bắt buộc cho JPA) ---
     public User() {
     }
 
@@ -58,4 +77,22 @@ public class User {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
+	public LocalDateTime getOtpExpiryTime() {
+		return otpExpiryTime;
+	}
+
+	public void setOtpExpiryTime(LocalDateTime otpExpiryTime) {
+		this.otpExpiryTime = otpExpiryTime;
+	}
+
+	public String getOtpCode() {
+		return otpCode;
+	}
+
+	public void setOtpCode(String otpCode) {
+		this.otpCode = otpCode;
+	}
+
+	
 }

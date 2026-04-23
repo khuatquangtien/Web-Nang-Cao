@@ -3,11 +3,19 @@ package TravelBooking.dto;
 public class LoginRequest {
     private String username;
     private String password;
-
+    private String email;
     // Constructors
     public LoginRequest() {}
     
-    public LoginRequest(String username, String password) {
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }

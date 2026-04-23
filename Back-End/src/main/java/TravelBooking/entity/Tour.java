@@ -1,9 +1,11 @@
 package TravelBooking.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "tours")
+@Data
 public class Tour {
 
     @Id
@@ -24,7 +26,7 @@ public class Tour {
     // 👇 SỬA LỖI SQL: Đổi tên 'desc' thành 'description' (vì desc là từ khóa cấm của SQL)
     @Column(length = 2000)
     private String description; 
-
+    private Double averageRating;
     private Integer maxGroupSize;
     private Boolean featured;   
     

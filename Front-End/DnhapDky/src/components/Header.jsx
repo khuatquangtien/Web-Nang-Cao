@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import UserBar from "./UserBar";
 const Header = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -19,6 +19,9 @@ const Header = () => {
     navigate("/login");
   };
 
+  const UserBartoggle = () => {
+    setIsOpen(!isOpen);                             
+  }
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
       <div className="container">
@@ -66,7 +69,11 @@ const Header = () => {
                     className="btn btn-light dropdown-toggle d-flex align-items-center gap-2 border-0 bg-transparent"
                     type="button"
                     data-bs-toggle="dropdown"
+                    onClick={UserBartoggle}
                   >
+                    {isOpen && (
+                      <UserBar />
+                    )}
                     <div className="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" 
                          style={{width: '32px', height: '32px', fontSize: '14px'}}>
                       {user.username?.charAt(0).toUpperCase() || "U"}
@@ -82,19 +89,7 @@ const Header = () => {
                     </div>
                   </button>
 
-                  <ul className="dropdown-menu dropdown-menu-end shadow border-0 mt-2 p-2 rounded-3">
-                    <li>
-                      <Link className="dropdown-item rounded-2 py-2" to="/my-bookings">
-                        <i className="bi bi-journal-text me-2 text-primary"></i>Quản lý đơn hàng
-                      </Link>
-                    </li>
-                    <li><hr className="dropdown-divider" /></li>
-                    <li>
-                      <button className="dropdown-item rounded-2 py-2 text-danger" onClick={handleLogout}>
-                        <i className="bi bi-box-arrow-right me-2"></i>Đăng xuất
-                      </button>
-                    </li>
-                  </ul>
+                  
                 </div>
               </>
             ) : (

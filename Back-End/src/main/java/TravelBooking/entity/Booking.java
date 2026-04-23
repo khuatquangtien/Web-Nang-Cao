@@ -31,7 +31,7 @@ public class Booking {
 
     private String status;
     
-    private Double totalPrice;
+    private Double totalPrice  ;
 
     // 👇 --- THÊM 2 DÒNG NÀY (Để lưu thông tin nhập từ Form) --- 👇
     
