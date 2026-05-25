@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import "../styles/admin.css"; // Import CSS vừa tạo
-import { BASE_URL } from "../utils/config";
+import "../../styles/admin.css";
+import { BASE_URL } from "../../utils/config";
 import {
   LineChart,
   Line,
@@ -10,7 +10,12 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  PieChart, // Thêm mới
+  Pie, // Thêm mới
+  Cell, // Thêm mới
+  Legend, // Thêm mới
 } from "recharts";
+
 const Admin = () => {
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
@@ -18,10 +23,28 @@ const Admin = () => {
     date: b.bookingDate,
     total: b.totalPrice || 0,
   }));
+  // biểu đồ chart
+  const charData = bookings.map((b) => ({
+    date: b.bookingDate,
+    total: b.totalPrice || 0,
+  }));
+  const pendingCount = bookings.filter((b) => b.status === "PENDING").length;
+  const confirmedCount = bookings.filter(
+    (b) => b.status === "CONFIRMED",
+  ).length;
+  const cancelledCount = bookings.filter(
+    (b) => b.status === "CANCELLED",
+  ).length;
+  const pieData = [
+    { name: "Đang chờ", value: pendingCount },
+    { name: "Đã duyệt", value: confirmedCount },
+    { name: "Đã hủy", value: cancelledCount },
+  ];
+  const COLORS = ["#f0ad4e", "#5cb85c", "#d9534f"]; // Màu cho từng trạng thái
   // 1. Lấy dữ liệu từ API
   const fetchBookings = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/bookings`);
+      const res = await fetch(`${BASE_URL}/bookings/tour`);
       if (!res.ok) throw new Error("Failed to fetch");
       const result = await res.json();
       setBookings(result);
@@ -40,7 +63,7 @@ const Admin = () => {
       return;
 
     try {
-      const res = await fetch(`${BASE_URL}/bookings/${id}`, {
+      const res = await fetch(`${BASE_URL}/bookings/tour/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: status }), // Gửi status dạng JSON
@@ -56,16 +79,17 @@ const Admin = () => {
       console.error(err);
     }
   };
-
+  // chức năng xóa vĩnh viễn đơn đặt tour, chỉ dành cho admin, có xác nhận trước khi xóa
   const deleteBooking = async (id) => {
     if (!window.confirm("Bạn có chắc chắn muốn XÓA vĩnh viễn đơn này?")) return;
     try {
-      await fetch(`${BASE_URL}/bookings/${id}`, { method: "DELETE" });
+      await fetch(`${BASE_URL}/bookings/tour/${id}`, { method: "DELETE" });
       fetchBookings();
     } catch (err) {
       alert("Lỗi xóa");
     }
   };
+  // biểu đồ pie chart về trạng thái đơn đặt tour (đang chờ, đã duyệt, đã hủy) - tạm thời để placeholder nếu chưa làm
 
   return (
     <div className="admin-container">
@@ -79,13 +103,13 @@ const Admin = () => {
           <li className="active">
             <i className="bi bi-cart-fill"></i> Quản lý Đặt Tour
           </li>
-          <li>
-            <i className="bi bi-people-fill"></i> Khách hàng
+          <li onClick={() => navigate("/customers")}>
+            <i className="bi bi-people-fill" ></i> Khách hàng
           </li>
-          <li>
+          <li onClick={() => navigate("/tourManager")}>
             <i
               className="bi bi-map-fill"
-              onClick={() => navigate("/tourManager")}
+              
             ></i>{" "}
             Tour du lịch
           </li>
@@ -123,16 +147,39 @@ const Admin = () => {
               {/* PIE (tạm thời để placeholder nếu chưa làm) */}
               <div className="pie-box">
                 <h5>Trạng thái</h5>
-                <p>Chưa thêm Pie Chart</p>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60} // Để tạo hình Donut (trống ở giữa), nếu muốn đặc thì xóa dòng này
+                      outerRadius={100}
+                      fill="#8884d8"
+                      paddingAngle={5}
+                      dataKey="value"
+                      label // Hiển thị số liệu bên cạnh
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend verticalAlign="bottom" height={36} />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
             <div className="stat-card">
               <h6>Tổng doanh thu</h6>
               <h3>
-                $
                 {bookings
                   .reduce((sum, b) => sum + (b.totalPrice || 0), 0)
                   .toLocaleString()}
+                <span> VND</span>
               </h3>
             </div>
 
@@ -184,7 +231,7 @@ const Admin = () => {
                       <td>{item.bookingDate}</td>
                       <td>{item.numPeople}</td>
                       <td className="text-primary fw-bold">
-                        ${item.totalPrice?.toLocaleString()}
+                        {item.totalPrice?.toLocaleString()} <span> VND</span>
                       </td>
                       <td>
                         <span

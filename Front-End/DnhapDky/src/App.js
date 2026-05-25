@@ -15,9 +15,13 @@ import MyBookings from "./pages/MyBookings";
 import TourDetail from "./pages/TourDetail";
 import Booking from "./pages/Booking";
 import ThankYou from "./pages/ThankYou"; // <--- 1. Import vào đây
-import Admin from "./pages/Admin";
+import Admin from "./pages/Admin/Admin";
+import CustomerManager from "./pages/Admin/CustomerManager"; // <--- 2. Import vào đâyq
 import ForgetPassword from "./pages/ForgetPassword";
-// --- Layout chung (Có Header) ---
+import TourManager from "./pages/Admin/TourManager"; // <--- 3. Import vào đây
+import AddTour from "./pages/Admin/AddTour"; // <--- 4. Import vào đây
+import HotelPage from "./pages/HotelPage"; // <--- 5. Import vào đây
+import HotelDetail from "./pages/HotelDetail"; // Nhớ import ở đầu file nhé
 const MainLayout = () => {
   return (
     <>
@@ -51,10 +55,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/customers" element={<CustomerManager />} />
+        <Route path="/tourManager" element={<TourManager />} />
+        <Route path="/admin/tours/add" element={<AddTour />} />
         {/* Trang Booking (nếu cần header thì đưa lên trên, nếu không thì để đây) */}
         {/* Thường booking cũng cần biết đang book tour nào, nên đặt là /tours/:id/book */}
         <Route path="/tours/:id/book" element={<Booking />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
+        <Route path="/hotels" element={<HotelPage />} />
+        <Route path="/hotel/:id" element={<HotelDetail />} />
       </Routes>
     </BrowserRouter>
   );

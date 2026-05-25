@@ -9,7 +9,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [role, setRole] = useState(""); // Mặc định là user
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,7 +18,7 @@ function Login() {
       alert("Vui lòng nhập đầy đủ tài khoản và mật khẩu!");
       return;
     }
-    
+
     setIsLoading(true);
 
     try {
@@ -37,7 +37,7 @@ function Login() {
       if (user.role === "ADMIN") {
         navigate("/admin");
       } else {
-        navigate("/");
+        navigate("/home");
       }
     } catch (err) {
       console.error(err);

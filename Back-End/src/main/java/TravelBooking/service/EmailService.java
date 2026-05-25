@@ -24,7 +24,7 @@ public class EmailService {
     private UserRepository userRepository;
     
     // Hàm gửi email HTML
-    public void sendHtmlEmail(String to, String subject, String name, String tourName, String date, int guestSize, double price) {
+    public void sendHtmlEmail(String to, String subject, String name, String tourName, String date, int guestSize, double price, long bookingId ) {
         try {
             // 1. Tạo Context để truyền dữ liệu vào file HTML
             Context context = new Context();
@@ -33,7 +33,8 @@ public class EmailService {
             context.setVariable("bookingDate", date);
             context.setVariable("guestSize", guestSize);
             context.setVariable("price", price);
-           
+         // 🌟 2. Truyền bookingId vào cho file HTML nhận diện được
+            context.setVariable("bookingId", bookingId);
             // 2. Nạp file HTML template (tên file là booking-confirmation.html)
             String htmlContent = templateEngine.process("booking-confirmation", context);
 

@@ -4,15 +4,25 @@ import { Link } from "react-router-dom";
 import { BASE_URL } from "../utils/config";
 import "../styles/home.css";
 import SearchBar from "../components/SearchBar";
-import Sidebar from "../components/Sidebar";  
-const Home = () => {  
+import Sidebar from "../components/Sidebar";
+import HotelPage from "./HotelPage"; // Import component khách sạn nổi bật1
+const Home = () => {
   const [tours, setTours] = useState([]);
   const [toursFeatured, setToursFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [loadingFeatured, setLoadingFeatured] = useState(true);
   const [errorFeatured, setErrorFeatured] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const toursPerPage = 6; // Số lượng tour hiển thị trên 1 trang (3 hàng x 3 cột)
+  // --- LOGIC PHÂN TRANG TOUR ---
+  const indexOfLastTour = currentPage * toursPerPage;
+  const indexOfFirstTour = indexOfLastTour - toursPerPage;
+  const currentTours = tours.slice(indexOfFirstTour, indexOfLastTour); // Lấy ra 9 tour của trang hiện tại
+  const totalPages = Math.ceil(tours.length / toursPerPage); // Tính tổng số trang
 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber); // Hàm chuyển trang
+  
   // Logic lấy tất cả tour
   useEffect(() => {
     axios
@@ -56,7 +66,6 @@ const Home = () => {
 
         {/* --- CỘT PHẢI: NỘI DUNG CHÍNH (Chiếm 9/12 phần chiều rộng) --- */}
         <div className="col-lg-9">
-          
           {/* 1. SEARCH BAR */}
           <div className="mb-5">
             <SearchBar />
@@ -87,10 +96,14 @@ const Home = () => {
                   <div className="card-body">
                     <h5 className="card-title">{tour.title}</h5>
                     <p className="card-text text-muted">
-                      <i className="bi bi-geo-alt-fill"></i> {tour.city || tour.destination}
+                      <i className="bi bi-geo-alt-fill"></i>{" "}
+                      {tour.city || tour.destination}
                     </p>
                     <h5 className="text-primary">{tour.price} VNĐ</h5>
-                    <Link to={`/tours/${tour.id}`} className="btn btn-primary w-100 mt-2">
+                    <Link
+                      to={`/tours/${tour.id}`}
+                      className="btn btn-primary w-100 mt-2"
+                    >
                       Xem ngay
                     </Link>
                   </div>
@@ -100,41 +113,75 @@ const Home = () => {
           </div>
 
           {/* 3. DANH SÁCH TẤT CẢ TOUR */}
-          <h2 className="mb-4">Khám phá tất cả các tour</h2>
-          {loading && <p>Đang tải dữ liệu...</p>}
-          {error && <p className="text-danger">{error}</p>}
+          {/* 3. DANH SÁCH TẤT CẢ TOUR */}
+        <h2 className="mb-4">Khám phá tất cả các tour</h2>
+        {loading && <p>Đang tải dữ liệu...</p>}
+        {error && <p className="text-danger">{error}</p>}
 
-          <div className="row">
-            {tours.map((tour) => (
-              <div className="col-md-4 mb-4" key={tour.id}>
-                <div className="card h-100 shadow-sm">
-                  <img
-                    src={tour.image ? tour.image : "https://via.placeholder.com/300x200"}
-                    className="card-img-top"
-                    alt={tour.title}
-                    style={{ height: "150px", objectFit: "cover" }}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "https://via.placeholder.com/300x200";
-                    }}
-                  />
-                  <div className="card-body">
-                    <h6 className="card-title text-truncate">{tour.title}</h6>
-                    <p className="card-text text-muted small">
-                      <i className="bi bi-geo-alt-fill"></i> {tour.city || tour.destination}
-                    </p>
-                    <p className="card-text text-success fw-bold">${tour.price}</p>
-                    <Link to={`/tours/${tour.id}`} className="btn btn-outline-secondary btn-sm w-100">
-                      Chi tiết
-                    </Link>
-                  </div>
+        {/* --- ĐỔI tours.map THÀNH currentTours.map TẠI ĐÂY --- */}
+        <div className="row">
+          {currentTours.map((tour) => (
+            <div className="col-md-4 mb-4" key={tour.id}>
+              <div className="card h-100 shadow-sm">
+                <img
+                  src={tour.image ? tour.image : "https://via.placeholder.com/300x200"}
+                  className="card-img-top"
+                  alt={tour.title}
+                  style={{ height: "150px", objectFit: "cover" }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://via.placeholder.com/300x200";
+                  }}
+                />
+                <div className="card-body">
+                  <h6 className="card-title text-truncate">{tour.title}</h6>
+                  <p className="card-text text-muted small">
+                    <i className="bi bi-geo-alt-fill"></i> {tour.city || tour.destination}
+                  </p>
+                  <p className="card-text text-success fw-bold">${tour.price}</p>
+                  <Link to={`/tours/${tour.id}`} className="btn btn-outline-secondary btn-sm">
+                    Chi tiết
+                  </Link>
                 </div>
               </div>
-            ))}
-          </div>
-        </div> 
+            </div>
+          ))}
+        </div>
+
+        {/* --- THÊM GIAO DIỆN NÚT PHÂN TRANG (BOOTSTRAP) VÀO ĐÂY --- */}
+        {totalPages > 1 && (
+          <nav aria-label="Page navigation" className="mt-4">
+            <ul className="pagination justify-content-center">
+              {/* Nút lùi */}
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <button className="page-link" onClick={() => paginate(currentPage - 1)}>
+                  Trước
+                </button>
+              </li>
+              
+              {/* Các nút số */}
+              {[...Array(totalPages)].map((_, index) => (
+                <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                  <button className="page-link" onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+
+              {/* Nút tiến */}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <button className="page-link" onClick={() => paginate(currentPage + 1)}>
+                  Sau
+                </button>
+              </li>
+            </ul>
+          </nav>
+        )}
+          {/* Danh sách tất cả các khách sạn nổi bật*/}
+          <HotelPage />
+        </div>
         {/* Kết thúc cột phải */}
-      </div> 
+      </div>
       {/* Kết thúc row */}
     </div>
   );

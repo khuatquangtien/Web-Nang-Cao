@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import TravelBooking.entity.Hotel;
@@ -37,18 +38,20 @@ public class HotelController {
 	}
 	// tìm kiếm theo từ khoá (thanh tìm kiếm)(user)
 	@GetMapping("/search")
-	public List<Hotel> searchHotelById(@PathVariable String keyword){
+	public List<Hotel> searchHotelById(@RequestParam String keyword){
 		return hotelRepository.findByNameContainingIgnoreCase(keyword);
 	}
 	// lấy chi tiết 1 khách sạn(user)
-	@GetMapping("/id")
+	@GetMapping("/{id}")
 	public Optional<Hotel> getHotelById(@PathVariable Long id) {
 		return hotelRepository.findById(id);
 	}
 //	// lấy các Hotels nổi bật
 	@GetMapping("/featuresHotels")
 	public List<Hotel> getAllFeaturesHotel(){
+		System.out.printf("Du lieu tra ve client: " , hotelRepository.findAll());
 		return hotelRepository.findTop5ByOrderByAverageRatingDesc();
+		
 	}
 	// lấy khách sạn lọc theo địa điểm
 //	@GetMapping("/location/{location}")

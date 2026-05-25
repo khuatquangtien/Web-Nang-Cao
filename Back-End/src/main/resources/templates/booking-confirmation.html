@@ -54,12 +54,20 @@
                 </tr>
                 <tr>
                     <td>Tổng tạm tính:</td>
-                    <td th:text="${price} + ' VND'">5.000.000 VND</td>
+                    <td th:text="${price} + ' VND'"> VND</td>
                 </tr>
             </table>
-
+			<div style="text-align: center; margin-top: 20px;">
+			    <h3>Quét mã QR để thanh toán</h3>
+			    <img th:src="@{|https://img.vietqr.io/image/970422-0399007905-compact2.png?amount=${price}&addInfo=Thanh toan don dat tour ${bookingId}&accountName=KHUÂT QUANG TIẾN|}" 
+			         alt="Mã QR Thanh Toán" 
+			         style="width: 250px; height: 250px; border: 1px solid #ddd; border-radius: 8px; padding: 10px;"/>
+			    
+			    <p>Số tiền cần thanh toán: <strong th:text="${price} + ' VNĐ'"></strong></p>
+			    <p>Nội dung: <strong th:text="'Thanh toan don dat tour ' + ${bookingId}"></strong></p>
+			</div>
             <div class="btn-container">
-                <a th:href="@{|http://192.168.1.2:9090/bookings/confirm/${bookingId}|}" class="btn-confirm">
+                <a th:href="@{|http://localhost:9090/bookings/tour/confirm/${bookingId}|}" class="btn-confirm">
                     XÁC NHẬN NGAY
                 </a>
             </div>

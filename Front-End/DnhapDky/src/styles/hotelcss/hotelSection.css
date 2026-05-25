@@ -1,0 +1,33 @@
+.hotel-section-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+.hotel-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.hotel-section-title {
+    font-size: 22px;
+    color: #e6b800; /* Màu vàng giống chữ Tour du lịch nổi bật trên Web của bạn */
+    margin: 0;
+}
+.hotel-see-all {
+    color: #0d7b8a;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+.hotel-grid-layout {
+    display: grid;
+    /* Tự động chia 4 cột trên màn hình máy tính, tự co giãn trên điện thoại */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+.hotel-loading, .hotel-no-data {
+    text-align: center;
+    padding: 40px;
+    color: #a0aec0;
+}

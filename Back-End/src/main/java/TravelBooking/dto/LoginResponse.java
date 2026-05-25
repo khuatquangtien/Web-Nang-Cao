@@ -25,6 +25,14 @@ public class LoginResponse {
 		this.id = id;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	// Getters and Setters
     public String getToken() { return token; }
     public void setToken(String token) { this.token = token; }

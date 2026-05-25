@@ -41,7 +41,6 @@ public class Booking {
     @Column(name = "customer_phone")
     private String customerPhone; // Lưu "SĐT" khách nhập (Dùng String để giữ số 0 đầu)
 
-
     // --- Constructor ---
     public Booking() {}
 

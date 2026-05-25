@@ -27,9 +27,13 @@ public class SecurityConfig {
             	    .requestMatchers("/users/**").permitAll()
 //            	    .requestMatchers(HttpMethod.GET, "/tours/search/getFeaturedTours").permitAll()
             	    .requestMatchers("/tours/**").permitAll()
-            	    .requestMatchers("/bookings/**").permitAll()
+            	    .requestMatchers("/bookings/tour**").permitAll()
             	    .requestMatchers("/search" , "/search/**").permitAll()
             	    .requestMatchers("/review" , "/review/**").permitAll()
+            	    .requestMatchers( "/hotels/**").permitAll()
+            	    .requestMatchers("/featuresHotels", "/hotels/**", "/bookings/tour/**", "/bookings/hotel/**").permitAll()
+            	    .requestMatchers("/bookings/tour/confirm/**").permitAll()
+            	    .requestMatchers("/api/payment/webhook").permitAll() 
             	    .anyRequest().authenticated()
             );
             
@@ -43,9 +47,12 @@ public class SecurityConfig {
         
         // 1. Chỉ giữ lại danh sách các nguồn cụ thể này
         configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:3000",   // Cho Web React
-            "http://192.168.1.3:3000", // IP máy của bạn
-            "http://10.0.2.2:3000"     // Cho Emulator
+            "http://localhost:9090",   // Cho Web React
+            "http://192.168.1.8:8081", // IP máy của bạn
+            "http://10.0.2.2:8081",// Cho Emulator
+            "http://10.23.119.159:8081",
+            "http://localhost:3000"
+     
         ));
 
         // 2. PHẢI XOÁ HOẶC COMMENT DÒNG NÀY (Dòng 49 trong ảnh của bạn)

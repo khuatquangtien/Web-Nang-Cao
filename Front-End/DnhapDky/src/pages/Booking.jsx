@@ -78,7 +78,7 @@ const Booking = ({ tour, avgRating }) => {
     console.log("Dữ liệu gửi đi:", bookingInfo); 
 
     try {
-      const res = await fetch(`${BASE_URL}/bookings`, { 
+      const res = await fetch(`${BASE_URL}/bookings/tour`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
