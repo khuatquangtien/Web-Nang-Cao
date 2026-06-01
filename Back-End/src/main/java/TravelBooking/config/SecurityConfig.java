@@ -34,6 +34,8 @@ public class SecurityConfig {
             	    .requestMatchers("/featuresHotels", "/hotels/**", "/bookings/tour/**", "/bookings/hotel/**").permitAll()
             	    .requestMatchers("/bookings/tour/confirm/**").permitAll()
             	    .requestMatchers("/api/payment/webhook").permitAll() 
+            	    .requestMatchers("/api/admin/forecast/**").permitAll() // Thêm dòng này
+            	    .requestMatchers("/api/ai/**").permitAll()
             	    .anyRequest().authenticated()
             );
             

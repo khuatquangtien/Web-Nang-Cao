@@ -223,6 +223,7 @@ public class BookingController {
     }
 
     // Hàm phụ trợ để tách số 62 từ chuỗi "Thanh toan don dat tour 62"
+    //Ham này dùng để báo cáo thanh toán 
     private Long extractBookingIdFromDescription(String description) {
         try {
             // Logic cắt chuỗi tùy thuộc vào cú pháp nội dung chuyển khoản bạn quy định
