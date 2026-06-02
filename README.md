@@ -1,9 +1,14 @@
 WEBSITE QUẢN LÝ VÀ ĐẶT TOUR DU LỊCH
 Giới thiệu đề tài
-Website Quản lý và Đặt Tour Du lịch là hệ thống hỗ trợ khách hàng tìm kiếm, lựa chọn và đặt các tour du lịch trực tuyến một cách nhanh chóng và thuận tiện. Hệ thống đồng thời hỗ trợ doanh nghiệp du lịch quản lý tour, khách hàng, đơn đặt tour và thống kê doanh thu.
+
+Website Quản lý và Đặt Tour Du lịch là hệ thống hỗ trợ khách hàng tìm kiếm, lựa chọn và đặt các tour du lịch trực tuyến một cách nhanh chóng và thuận tiện. Hệ thống đồng thời hỗ trợ doanh nghiệp du lịch quản lý tour, 
+khách hàng, đơn đặt tour và thống kê doanh thu.
+
 Mục tiêu của hệ thống là số hóa quy trình kinh doanh du lịch, giúp khách hàng dễ dàng tiếp cận các dịch vụ du lịch và giúp doanh nghiệp nâng cao hiệu quả quản lý.
+
 Chức năng chính
 Đối với khách hàng
+
 •	Đăng ký tài khoản
 •	Đăng nhập hệ thống
 •	Xem danh sách tour du lịch
@@ -15,6 +20,7 @@ Chức năng chính
 •	Theo dõi trạng thái đơn hàng
 •	Cập nhật thông tin cá nhân
 •	Nhận email xác nhận sau khi đặt tour thành công
+
 Đối với quản trị viên
 •	Quản lý tour du lịch
 •	Quản lý nhân viên
@@ -25,6 +31,7 @@ Chức năng chính
 •	Thống kê doanh thu
 •	Thống kê số lượng booking
 •	Theo dõi hoạt động hệ thống
+
 Thành viên thực hiện
 STT	Họ và tên	MSSV	Nhiệm vụ
 1	Khuất Quang Tiến	23810310413	Nhóm trưởng
