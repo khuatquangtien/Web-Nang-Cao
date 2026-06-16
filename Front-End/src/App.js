@@ -22,6 +22,7 @@ import TourManager from "./pages/Admin/TourManager"; // <--- 3. Import vào đâ
 import AddTour from "./pages/Admin/AddTour"; // <--- 4. Import vào đây
 import HotelPage from "./pages/HotelPage"; // <--- 5. Import vào đây
 import HotelDetail from "./pages/HotelDetail"; // Nhớ import ở đầu file nhé
+import DashBoard from "./pages/Admin/Dashboard"; // <--- 6. Import vào đây
 const MainLayout = () => {
   return (
     <>
@@ -58,6 +59,7 @@ function App() {
         <Route path="/customers" element={<CustomerManager />} />
         <Route path="/tourManager" element={<TourManager />} />
         <Route path="/admin/tours/add" element={<AddTour />} />
+        <Route path="/dashboard" element={<DashBoard />} />
         {/* Trang Booking (nếu cần header thì đưa lên trên, nếu không thì để đây) */}
         {/* Thường booking cũng cần biết đang book tour nào, nên đặt là /tours/:id/book */}
         <Route path="/tours/:id/book" element={<Booking />} />

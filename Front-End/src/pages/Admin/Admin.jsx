@@ -97,10 +97,10 @@ const Admin = () => {
       <div className="sidebar">
         <div className="sidebar-header">HỆ THỐNG QUẢN LÝ</div>
         <ul className="sidebar-menu">
-          <li>
+          <li onClick={() => navigate("/dashboard")}>
             <i className="bi bi-speedometer2"></i> Dashboard
           </li>
-          <li className="active">
+          <li className="active" onClick={() => navigate("/admin")}>
             <i className="bi bi-cart-fill"></i> Quản lý Đặt Tour
           </li>
           <li onClick={() => navigate("/customers")}>

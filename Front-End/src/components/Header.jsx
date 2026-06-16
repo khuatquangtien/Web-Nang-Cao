@@ -27,7 +27,7 @@ const Header = () => {
       <div className="container">
         {/* LOGO */}
         <Link className="navbar-brand fw-bold text-primary fs-3" to="/">
-          Trip.com
+          HTH Travel
         </Link>
 
         <button

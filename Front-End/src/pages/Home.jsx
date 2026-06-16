@@ -114,7 +114,7 @@ const Home = () => {
 
           {/* 3. DANH SÁCH TẤT CẢ TOUR */}
           {/* 3. DANH SÁCH TẤT CẢ TOUR */}
-        <h2 className="mb-4">Khám phá tất cả các tour</h2>
+        <h2 className="mb-3 text-warning">Khám phá tất cả các tour</h2>
         {loading && <p>Đang tải dữ liệu...</p>}
         {error && <p className="text-danger">{error}</p>}
 
