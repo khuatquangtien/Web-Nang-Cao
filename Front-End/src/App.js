@@ -23,6 +23,7 @@ import AddTour from "./pages/Admin/AddTour"; // <--- 4. Import vào đây
 import HotelPage from "./pages/HotelPage"; // <--- 5. Import vào đây
 import HotelDetail from "./pages/HotelDetail"; // Nhớ import ở đầu file nhé
 import DashBoard from "./pages/Admin/Dashboard"; // <--- 6. Import vào đây
+
 const MainLayout = () => {
   return (
     <>
