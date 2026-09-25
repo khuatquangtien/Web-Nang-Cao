@@ -17,12 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import TravelBooking.entity.Booking;
-import TravelBooking.entity.Tour;
-import TravelBooking.entity.User;
-import TravelBooking.repository.BookingRepository;
-import TravelBooking.repository.TourRepository;
-import TravelBooking.service.EmailService;
+import TravelBooking.common.notification.EmailService;
+import TravelBooking.features.booking.controller.BookingController;
+import TravelBooking.features.booking.entity.Booking;
+import TravelBooking.features.booking.repository.BookingRepository;
+import TravelBooking.features.tour.entity.Tour;
+import TravelBooking.features.tour.repository.TourRepository;
+import TravelBooking.features.user.entity.User;
 
 @ExtendWith(MockitoExtension.class)
 public class BookingControllerTest {
@@ -89,7 +90,7 @@ public class BookingControllerTest {
     public void testCreateBooking_Fail_NoUser() {
         Tour mockTour = new Tour();
         mockTour.setId(1L);
-        
+
         Booking bookingRequest = new Booking();
         bookingRequest.setTour(mockTour);
         // Không set User cho booking

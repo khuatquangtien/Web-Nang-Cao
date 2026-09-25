@@ -20,8 +20,8 @@ const Header = () => {
   };
 
   const UserBartoggle = () => {
-    setIsOpen(!isOpen);                             
-  }
+    setIsOpen(!isOpen);
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
       <div className="container">
@@ -42,25 +42,33 @@ const Header = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 fw-medium">
             <li className="nav-item ms-3">
-              <Link className="nav-link text-dark" to="/">Khách sạn</Link>
+              <Link className="nav-link text-dark" to="/hotel">
+                Khách sạn
+              </Link>
             </li>
             <li className="nav-item ms-3">
-              <Link className="nav-link text-dark" to="/">Vé máy bay</Link>
+              <Link className="nav-link text-dark" to="#" title="Tính năng đang phát triển">
+                Vé máy bay
+              </Link>
             </li>
             <li className="nav-item ms-3">
-              <Link className="nav-link text-primary fw-bold" to="/">Tour du lịch</Link>
+              <Link className="nav-link text-primary fw-bold" to="/home">
+                Tour du lịch
+              </Link>
             </li>
           </ul>
 
           {/* --- KHU VỰC TÀI KHOẢN --- */}
           <div className="d-flex align-items-center gap-3">
-            
             {user ? (
               // === ĐÃ ĐĂNG NHẬP ===
               <>
                 {/* 1. MỚI THÊM: Nút Lịch sử đặt tour nằm cạnh Avatar */}
-                <Link to="/my-bookings" className="text-decoration-none text-dark fw-medium me-3 btn-hover-light p-2 rounded">
-                   Đơn đặt chỗ
+                <Link
+                  to="/my-bookings"
+                  className="text-decoration-none text-dark fw-medium me-3 btn-hover-light p-2 rounded"
+                >
+                  Đơn đặt chỗ
                 </Link>
 
                 {/* 2. Phần Avatar & Dropdown cũ */}
@@ -71,39 +79,54 @@ const Header = () => {
                     data-bs-toggle="dropdown"
                     onClick={UserBartoggle}
                   >
-                    {isOpen && (
-                      <UserBar />
-                    )}
-                    <div className="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" 
-                         style={{width: '32px', height: '32px', fontSize: '14px'}}>
+                    {isOpen && <UserBar />}
+                    <div
+                      className="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                      style={{
+                        width: "32px",
+                        height: "32px",
+                        fontSize: "14px",
+                      }}
+                    >
                       {user.username?.charAt(0).toUpperCase() || "U"}
                     </div>
-                    
+
                     <div className="text-start lh-1">
-                      <div className="fw-bold text-dark" style={{fontSize: '14px'}}>
-                          {user.username || "Thành viên"}
+                      <div
+                        className="fw-bold text-dark"
+                        style={{ fontSize: "14px" }}
+                      >
+                        {user.username || "Thành viên"}
                       </div>
-                      <div className="text-warning mt-1" style={{fontSize: '11px'}}>
-                         <i className="bi bi-coin me-1"></i>0 xu
+                      <div
+                        className="text-warning mt-1"
+                        style={{ fontSize: "11px" }}
+                      >
+                        <i className="bi bi-coin me-1"></i>0 xu
                       </div>
                     </div>
                   </button>
-
-                  
                 </div>
               </>
             ) : (
               // === CHƯA ĐĂNG NHẬP ===
               <>
-                <Link to="/register" className="text-decoration-none text-muted fw-medium me-2" style={{fontSize: '14px'}}>
+                <Link
+                  to="/register"
+                  className="text-decoration-none text-muted fw-medium me-2"
+                  style={{ fontSize: "14px" }}
+                >
                   Tra cứu đơn hàng
                 </Link>
-                <Link to="/login" className="btn btn-primary px-3 py-2 rounded-3 fw-bold" style={{fontSize: '14px'}}>
+                <Link
+                  to="/login"
+                  className="btn btn-primary px-3 py-2 rounded-3 fw-bold"
+                  style={{ fontSize: "14px" }}
+                >
                   Đăng nhập / Đăng ký
                 </Link>
               </>
             )}
-            
           </div>
         </div>
       </div>

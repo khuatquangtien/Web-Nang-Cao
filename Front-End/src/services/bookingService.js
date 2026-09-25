@@ -1,7 +1,9 @@
 // src/services/bookingService.js
 import axios from "axios";
+import { BASE_URL } from "../utils/config";
 
-const API_URL = "http://localhost:8080/api/bookings";
+
+const API_URL = `${BASE_URL}/bookings/tour`; //  Dùng chung BASE_URL (cổng 9090)
 
 export const createBooking = (data, token) => {
   return axios.post(API_URL, data, {

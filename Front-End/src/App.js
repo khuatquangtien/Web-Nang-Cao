@@ -35,6 +35,18 @@ const MainLayout = () => {
     </>
   );
 };
+// --- THÊM COMPONENT PRIVATE ROUTE VÀO ĐÂY ---
+const PrivateRoute = ({ children, requiredRole }) => {
+  const userString = localStorage.getItem("user");
+  const user = userString ? JSON.parse(userString) : null;
+  // Nếu chưa đăng nhập hoặc role không khớp -> Đẩy về trang đăng nhập
+  if (!user || (requiredRole && user.role !== requiredRole)) {
+    return <Navigate to="/login" />;
+  }
+  // Nếu hợp lệ -> Cho phép xem component bên trong
+  return children;
+};
+// --------------------------------------------
 
 function App() {
   return (
@@ -51,22 +63,23 @@ function App() {
           {/* QUAN TRỌNG: Sửa đường dẫn này để khớp với TourCard */}
           {/* ":id" là cú pháp để nhận tham số động (ví dụ id=4) */}
           <Route path="/tours/:id" element={<TourDetail />} />
+          <Route path="/hotel" element={<HotelPage />} />
+          <Route path="/hotel/:id" element={<HotelDetail />} />
         </Route>
 
         {/* === NHÓM 2: CÁC TRANG KHÔNG CÓ HEADER (Riêng lẻ) === */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/customers" element={<CustomerManager />} />
-        <Route path="/tourManager" element={<TourManager />} />
-        <Route path="/admin/tours/add" element={<AddTour />} />
-        <Route path="/dashboard" element={<DashBoard />} />
+        <Route path="/admin" element={<PrivateRoute requiredRole={"ADMIN"}><Admin /></PrivateRoute>} />
+        <Route path="/customers" element={<PrivateRoute requiredRole={"ADMIN"}><CustomerManager /></PrivateRoute>} />
+        <Route path="/tourManager" element={<PrivateRoute requiredRole={"ADMIN"}><TourManager /></PrivateRoute>} />
+        <Route path="/admin/tours/add" element={<PrivateRoute requiredRole={"ADMIN"}><AddTour /></PrivateRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute requiredRole={"ADMIN"}><DashBoard /></PrivateRoute>} />
         {/* Trang Booking (nếu cần header thì đưa lên trên, nếu không thì để đây) */}
         {/* Thường booking cũng cần biết đang book tour nào, nên đặt là /tours/:id/book */}
         <Route path="/tours/:id/book" element={<Booking />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
-        <Route path="/hotels" element={<HotelPage />} />
-        <Route path="/hotel/:id" element={<HotelDetail />} />
+
       </Routes>
     </BrowserRouter>
   );

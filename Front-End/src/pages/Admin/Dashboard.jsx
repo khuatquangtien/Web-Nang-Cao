@@ -13,7 +13,7 @@ import {
   Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-
+import { BASE_URL } from "../../utils/config";
 // Đăng ký các thành phần của Chart.js
 ChartJS.register(
   CategoryScale,
@@ -38,7 +38,7 @@ const Dashboard = () => {
   const currentTourInfo = chartData;
   const [isCalculating, setIsCalculating] = useState(false);
   useEffect(() => {
-    fetch("http://localhost:9090/tours")
+    fetch(BASE_URL + "/tours")
       .then((res) => res.json())
       .then((data) => {
         setTourList(data);
@@ -62,7 +62,7 @@ const Dashboard = () => {
     try {
       // Sử dụng đúng port 9090 như trong ảnh code Spring Boot của bạn
       const response = await fetch(
-        `http://localhost:9090/api/admin/forecast/${tourId}`,
+        BASE_URL + `/api/admin/forecast/${tourId}`,
       );
       if (!response.ok) {
         throw new Error(
@@ -126,7 +126,7 @@ const Dashboard = () => {
     setIsCalculating(true); // Hiển thị trạng thái đang tính toán
 
     // Gọi API sang Spring Boot (Đổi cổng 9090 nếu backend của bạn dùng cổng khác)
-    fetch("http://localhost:9090/api/ai/run-pipeline", {
+    fetch(BASE_URL + `/api/ai/run-pipeline`, {
       method: "POST",
     })
       .then((res) => res.json())
@@ -159,7 +159,7 @@ const Dashboard = () => {
           <li onClick={() => navigate("/dashboard")} className="active">
             <i className="bi bi-speedometer2"></i> Dashboard
           </li>
-          <li  onClick={() => navigate("/admin")}>
+          <li onClick={() => navigate("/admin")}>
             <i className="bi bi-cart-fill"></i> Quản lý Đặt Tour
           </li>
           <li className="">

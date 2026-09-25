@@ -14,7 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import TravelBooking.entity.User;
+import TravelBooking.features.user.controller.UserController;
+import TravelBooking.features.user.entity.User;
 import TravelBooking.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,13 +78,13 @@ public class UserControllerTest {
         User existingUser = new User();
         existingUser.setUsername("user9092_new"); // Đổi username để chắc chắn lỗi do email
         existingUser.setPhone("0399007906");
-        existingUser.setEmail("khuatt37@gmail.com"); 
+        existingUser.setEmail("khuatt37@gmail.com");
         existingUser.setFullName("khuất quang tiến");
         existingUser.setPassword("1");
 
         // Giả lập DB không trùng username nhưng TRÙNG email
         Mockito.when(userRepository.existsByUsername("user9092_new")).thenReturn(false);
-        Mockito.when(userRepository.existsByEmail("khuatt37@gmail.com")).thenReturn(true); 
+        Mockito.when(userRepository.existsByEmail("khuatt37@gmail.com")).thenReturn(true);
 
         ResponseEntity<?> response = userController.register(existingUser);
 
