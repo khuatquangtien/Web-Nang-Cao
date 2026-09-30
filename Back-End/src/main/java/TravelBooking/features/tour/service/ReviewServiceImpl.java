@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import TravelBooking.features.tour.entity.Review;
 import TravelBooking.features.tour.entity.Tour;
@@ -29,6 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
     // }
 
     // Hàm lưu đánh giá mới
+    @Transactional
     @Override
     public Review createReview(Review review) {
         // 1. Lưu đánh giá mới của User vào bảng Review

@@ -1,4 +1,4 @@
-package TravelBooking.features.user.dto.response;
+package TravelBooking.features.user.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,17 +9,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
-
-    private String token;
-
-    private Long id;
+public class RegisterRequest {
 
     private String username;
 
+    private String password;
+
     private String email;
 
-    private String role;
+    private String fullName;
 
-    private String message;
+    private String phone;
 }

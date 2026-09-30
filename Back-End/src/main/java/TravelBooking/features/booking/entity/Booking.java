@@ -2,6 +2,8 @@ package TravelBooking.features.booking.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import lombok.Data;
+
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -10,6 +12,7 @@ import TravelBooking.features.user.entity.User;
 
 @Entity
 @Table(name = "bookings")
+@Data
 public class Booking {
 
     @Id
@@ -32,9 +35,12 @@ public class Booking {
     @Min(value = 1, message = "Số người phải ít nhất là 1")
     private Integer numPeople;
 
-    private String status;
-
     private Double totalPrice;
+
+    private String note;
+
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
 
     // 👇 --- THÊM 2 DÒNG NÀY (Để lưu thông tin nhập từ Form) --- 👇
 
@@ -57,7 +63,7 @@ public class Booking {
         this.bookingDate = bookingDate;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
-        this.status = "PENDING";
+        this.status = BookingStatus.PENDING;
     }
 
     // --- Getters & Setters (Bắt buộc phải thêm cho 2 trường mới) ---
@@ -102,11 +108,11 @@ public class Booking {
         this.numPeople = numPeople;
     }
 
-    public String getStatus() {
+    public BookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 

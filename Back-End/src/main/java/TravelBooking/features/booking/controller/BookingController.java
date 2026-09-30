@@ -1,5 +1,6 @@
 package TravelBooking.features.booking.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import TravelBooking.common.dto.ApiResponse;
+import TravelBooking.features.booking.dto.request.BookingTourRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
+import TravelBooking.features.booking.dto.response.BookingResponse;
 import TravelBooking.features.booking.entity.Booking;
 import TravelBooking.features.booking.service.BookingService;
 
@@ -29,27 +33,34 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<?> createBooking(@RequestBody Booking booking) {
-        Map<String, Object> result = bookingService.createBooking(booking);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<ApiResponse<Map<String, Object>>> createBooking(@RequestBody BookingTourRequest booking, Principal principal) {
+        String username = principal.getName();
+        Map<String, Object> result = bookingService.createBooking(booking, username);
+        return ResponseEntity.ok(ApiResponse.success("Đặt tour thành công", result));
     }
 
     // lấy tất cả các danh sách
     @GetMapping
-    public List<Booking> getAllBookings() {
-        return bookingService.getAllBookings();
+    public ResponseEntity<ApiResponse<List<BookingResponse>>> getAllBookings() {
+        return ResponseEntity.ok(ApiResponse.success(bookingService.getAllBookings()));
     }
 
     // Lịch sử tour
     @GetMapping("/user/{userId}")
-    public List<Booking> getBookingsByUser(@PathVariable Long userId) {
-        return bookingService.findByUserId(userId);
+    public ResponseEntity<ApiResponse<List<BookingResponse>>> getBookingsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(ApiResponse.success(bookingService.findByUserId(userId)));
     }
 
-    // chi tieest 1 tour
+    // Lịch sử tour của chính người đăng nhập
+    @GetMapping("/my-bookings")
+    public ResponseEntity<ApiResponse<List<BookingResponse>>> getMyBookings(Principal principal) {
+        return ResponseEntity.ok(ApiResponse.success(bookingService.getMyBookings(principal.getName())));
+    }
+
+    // Chi tiết 1 tour theo id
     @GetMapping("/{id}")
-    public Booking getBookingById(@PathVariable Long id) { // Sửa bookingId thành id
-        return bookingService.findByBookingId(id);
+    public ResponseEntity<ApiResponse<BookingResponse>> getBookingById(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(bookingService.findByBookingId(id)));
     }
 
     // 2. API CẬP NHẬT TRẠNG THÁI (Cho nút Duyệt/Hủy bên Admin)

@@ -21,6 +21,7 @@ public class TourServiceImpl implements TourService {
         return tourRepository.findAll();
     }
 
+    @Transactional
     @Override
     public Tour createTour(Tour newTour) {
         return tourRepository.save(newTour);
@@ -42,6 +43,7 @@ public class TourServiceImpl implements TourService {
                 .orElseThrow(() -> new RuntimeException("Tour không tồn tại với id: " + tourId));
     }
 
+    @Transactional
     @Override
     public void deleteTour(long tourId) {
         Tour existingTour = getTourById(tourId);

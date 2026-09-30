@@ -1,7 +1,6 @@
 package TravelBooking.features.user.controller; // Đảm bảo đúng tên package của bạn
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,71 +12,68 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import TravelBooking.common.dto.ApiResponse;
 import TravelBooking.features.user.dto.request.LoginRequest;
+import TravelBooking.features.user.dto.request.RegisterRequest;
 import TravelBooking.features.user.dto.request.ResetPasswordRequest;
-import TravelBooking.features.user.entity.User;
+import TravelBooking.features.user.dto.request.UpdateUserRequest;
+import TravelBooking.features.user.dto.response.LoginResponse;
+import TravelBooking.features.user.dto.response.UserResponse;
 import TravelBooking.features.user.service.UserService;
 
-@RestController // Đánh dấu đây là nơi tiếp nhận API
-@RequestMapping("/users") // Tất cả các đường dẫn sẽ bắt đầu bằng /users
-// @CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     // 1. API lấy danh sách tất cả user
-    // Đường dẫn: GET http://localhost:9090/users
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllUsers() {
+        return ResponseEntity.ok(ApiResponse.success(userService.getAllUsers()));
     }
 
-    // 2. API tạo mới một user/ đăng kí tại khoản
-    // Đường dẫn: POST http://localhost:9090/users
+    // 2. API tạo mới một user / đăng ký tài khoản
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        Map<String, Object> result = userService.register(user);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<ApiResponse<UserResponse>> register(@RequestBody RegisterRequest request) {
+        UserResponse result = userService.register(request);
+        return ResponseEntity.ok(ApiResponse.success("Đăng ký tài khoản thành công", result));
     }
 
-    // API Đăng nhập
-    // POST: http://localhost:9090/users/login
+    // 3. API Đăng nhập
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Map<String, Object> result = userService.login(loginRequest);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest) {
+        LoginResponse result = userService.login(loginRequest);
+        return ResponseEntity.ok(ApiResponse.success("Đăng nhập thành công", result));
     }
 
-    // Quên Mật khẩu
+    // 4. Quên Mật khẩu
     @PostMapping("/forgetPass")
-    public ResponseEntity<?> requestOTPPass(@RequestBody ResetPasswordRequest email) {
+    public ResponseEntity<ApiResponse<Void>> requestOTPPass(@RequestBody ResetPasswordRequest email) {
         userService.sendOTP(email);
-        return ResponseEntity.ok("đã gửi mã OTP");
-
+        return ResponseEntity.ok(ApiResponse.success("Đã gửi mã OTP đến email của bạn", null));
     }
 
-    // Reset mật khẩu
+    // 5. Reset mật khẩu
     @PostMapping("/resetPassword")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@RequestBody ResetPasswordRequest request) {
         userService.resetPassWord(request.getOtp(), request.getEmail(), request.getNewPassword());
-        return ResponseEntity.ok("Da doi mat khau");
-
+        return ResponseEntity.ok(ApiResponse.success("Đổi mật khẩu thành công", null));
     }
 
-    // lấy tài kho;ản theo id
+    // 6. Lấy thông tin user theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable Long id) {
+        UserResponse user = userService.getUserById(id);
+        return ResponseEntity.ok(ApiResponse.success(user));
     }
 
-    //
+    // 7. Cập nhật thông tin user
     @PutMapping("/update/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        // Tìm người dùng trong DB
-        User user = userService.updateUser(id, userDetails);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest userDetails) {
+        UserResponse user = userService.updateUser(id, userDetails);
+        return ResponseEntity.ok(ApiResponse.success("Cập nhật thông tin thành công", user));
     }
 
 }

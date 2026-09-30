@@ -1,4 +1,4 @@
-package TravelBooking.repository;
+package TravelBooking.features.user.repository;
 
 import java.util.Optional;
 

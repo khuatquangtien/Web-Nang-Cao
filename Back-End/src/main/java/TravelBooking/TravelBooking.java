@@ -8,7 +8,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@EnableJpaRepositories(basePackages = "TravelBooking")
+@EntityScan(basePackages = "TravelBooking")
 @EnableAsync 
 public class TravelBooking {
 

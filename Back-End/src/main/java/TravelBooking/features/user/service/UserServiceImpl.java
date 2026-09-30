@@ -73,77 +73,71 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	// đăng kí
-	public Map<String, Object> register(User user) {
+	public TravelBooking.features.user.dto.response.UserResponse register(TravelBooking.features.user.dto.request.RegisterRequest request) {
 		// trùng username
-		if (userRepository.existsByUsername(user.getUsername()))
-			throw new RuntimeException("Tên Đăng nhập" + user.getUsername() + " đã tồn tại");
+		if (userRepository.existsByUsername(request.getUsername()))
+			throw new RuntimeException("Tên Đăng nhập " + request.getUsername() + " đã tồn tại");
 		// trùng email
-		if (userRepository.existsByEmail(user.getEmail()))
-			throw new RuntimeException("Email" + user.getEmail() + " đã tồn tại");
+		if (userRepository.existsByEmail(request.getEmail()))
+			throw new RuntimeException("Email " + request.getEmail() + " đã tồn tại");
 
-		// mã hoá pass
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		User user = new User();
+		user.setUsername(request.getUsername());
+		user.setEmail(request.getEmail());
+		user.setFullName(request.getFullName());
+		user.setPhone(request.getPhone());
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
+		user.setRole("USER");
 
-		// set role
-		if (user.getRole() == null || user.getRole().isEmpty()) {
-			user.setRole("USER");
-		}
 		User savedUser = userRepository.save(user);
-
-		Map<String, Object> response = new HashMap<>();
-		response.put("message", "Đăng kí tài khoản thành công");
-		response.put("userId", savedUser.getId());
-		response.put("username", savedUser.getUsername());
-		return response;
+		return TravelBooking.features.user.dto.response.UserResponse.fromEntity(savedUser);
 	}
 
 	@Override
 	// Đăng nhập
-	public Map<String, Object> login(LoginRequest request) {
+	public TravelBooking.features.user.dto.response.LoginResponse login(LoginRequest request) {
 		User user = userRepository.findByUsername(request.getUsername())
-				.orElseThrow(() -> new RuntimeException("Tên đăng nhập không chính xác"));
+				.orElseThrow(() -> new RuntimeException("Tên đăng nhập hoặc mật khẩu không chính xác"));
 
 		if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-			throw new RuntimeException("Tên đăng nhập hoặc mật khẩu không chinh xác");
+			throw new RuntimeException("Tên đăng nhập hoặc mật khẩu không chính xác");
 
 		String token = jwtTokenProvider.generateToken(user.getUsername(), user.getRole());
-		Map<String, Object> response = new HashMap<>();
-		response.put("message", "Đăng nhập thành công");
-		response.put("id", user.getId());
-		response.put("email", user.getEmail());
-		response.put("username", user.getUsername());
-		response.put("role", user.getRole());
-		response.put("token", token);
-		return response;
-
+		return TravelBooking.features.user.dto.response.LoginResponse.builder()
+				.token(token)
+				.id(user.getId())
+				.username(user.getUsername())
+				.email(user.getEmail())
+				.role(user.getRole())
+				.message("Đăng nhập thành công")
+				.build();
 	}
 
 	@Override
-	public User getUserById(Long id) {
-
-		return userRepository.findById(id).get();
+	public TravelBooking.features.user.dto.response.UserResponse getUserById(Long id) {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy user với id: " + id));
+		return TravelBooking.features.user.dto.response.UserResponse.fromEntity(user);
 	}
 
 	@Override
-	public User updateUser(Long id, User userDetails) {
-		Optional<User> user = userRepository.findById(id);
-		if (user.isPresent()) {
-			User existingUser = user.get();
-			existingUser.setFullName(userDetails.getFullName());
-			existingUser.setPhone(userDetails.getPhone());
-			existingUser.setEmail(userDetails.getEmail());
+	public TravelBooking.features.user.dto.response.UserResponse updateUser(Long id, TravelBooking.features.user.dto.request.UpdateUserRequest userDetails) {
+		User existingUser = userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy user với id: " + id));
 
-			userRepository.save(existingUser);
-			return existingUser;
-		} else {
-			throw new RuntimeException("Không tìm thấy user");
-		}
+		existingUser.setFullName(userDetails.getFullName());
+		existingUser.setPhone(userDetails.getPhone());
+		existingUser.setEmail(userDetails.getEmail());
 
+		User updatedUser = userRepository.save(existingUser);
+		return TravelBooking.features.user.dto.response.UserResponse.fromEntity(updatedUser);
 	}
 
 	@Override
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	public List<TravelBooking.features.user.dto.response.UserResponse> getAllUsers() {
+		return userRepository.findAll().stream()
+				.map(TravelBooking.features.user.dto.response.UserResponse::fromEntity)
+				.toList();
 	}
 
 }

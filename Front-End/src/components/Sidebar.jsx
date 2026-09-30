@@ -2,40 +2,60 @@ import React from "react";
 import { Link } from "react-router-dom";
 const Sidebar = () => {
   const menuItems = [
-    { icon: "bi bi-globe", text: "Tour & Hoạt động", path: "/tours" },
-    { icon: "bi bi-building", text: "Khách sạn & Chỗ nghỉ", path:"/hotels" },
-    { icon: "bi bi-airplane", text: "Vé Máy bay" },
-    { icon: "bi bi-train-front", text: "Vé Tàu" },
-    { icon: "bi bi-car-front", text: "Đưa đón sân bay" },
-    { icon: "bi bi-gift", text: "Combo Tiết kiệm" },
+    { icon: "bi bi-compass", text: "Tất cả Tour", path: "/tours", badge: "Hot" },
+    { icon: "bi bi-building", text: "Khách sạn & Chỗ nghỉ", path: "/hotels" },
+    { icon: "bi bi-airplane", text: "Vé Máy bay", path: "#", badge: "Sắp ra mắt" },
+    { icon: "bi bi-train-front", text: "Vé Tàu hỏa", path: "#" },
+    { icon: "bi bi-car-front", text: "Xe đưa đón", path: "#" },
+    { icon: "bi bi-gift", text: "Ưu đãi Combo", path: "#" },
   ];
-  const [index, setindex] = React.useState(0);
+  const [index, setIndex] = React.useState(0);
 
   return (
-    <div>
-      {menuItems.map((item, idx) => (
-        // 3. Đổi thẻ <div> thành <Link> và truyền url vào thuộc tính to
-        <Link
-          to={item.path}
-          key={idx}
-          className={`sidebar-item ${index === idx ? "active" : ""}`}
-          onClick={() => setindex(idx)} // Cập nhật lại vị trí menu đang được chọn để sáng đèn (active)
-          style={{
-            fontSize: "19px",
-            textDecoration: "none",
-            color: "inherit",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px", // Tạo khoảng cách giữa Icon và Chữ cho thoáng
-            padding: "10px 15px",
-          }} // Giữ nguyên style chữ, không bị gạch chân kiểu link
-        >
-          <i className={item.icon}></i>
-          <span>{item.text}</span>
-        </Link>
-      ))}
+    <div className="bg-white p-3 rounded-4 shadow-sm border" style={{ borderColor: "var(--border-color)" }}>
+      <h6 className="fw-bold px-3 py-2 text-uppercase mb-2" style={{ fontSize: "0.75rem", letterSpacing: "1px", color: "var(--text-light)" }}>
+        Danh mục dịch vụ
+      </h6>
+      <div className="d-flex flex-column gap-1">
+        {menuItems.map((item, idx) => {
+          const isActive = index === idx;
+          return (
+            <Link
+              to={item.path}
+              key={idx}
+              onClick={() => setIndex(idx)}
+              className="text-decoration-none d-flex align-items-center justify-content-between px-3 py-2 rounded-3"
+              style={{
+                transition: "var(--transition-fast)",
+                background: isActive ? "var(--primary-light)" : "transparent",
+                color: isActive ? "var(--primary)" : "var(--text-main)",
+                fontWeight: isActive ? "600" : "500",
+                fontSize: "0.95rem"
+              }}
+            >
+              <div className="d-flex align-items-center gap-3">
+                <i className={`${item.icon}`} style={{
+                  fontSize: "1.1rem",
+                  color: isActive ? "var(--primary)" : "var(--text-muted)"
+                }}></i>
+                <span>{item.text}</span>
+              </div>
+              {item.badge && (
+                <span className="badge rounded-pill" style={{
+                  fontSize: "0.65rem",
+                  background: item.badge === "Hot" ? "linear-gradient(135deg, #ef4444, #f97316)" : "#e2e8f0",
+                  color: item.badge === "Hot" ? "#fff" : "#64748b"
+                }}>
+                  {item.badge}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 };
+
 
 export default Sidebar;

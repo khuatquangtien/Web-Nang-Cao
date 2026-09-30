@@ -16,8 +16,11 @@ import org.springframework.stereotype.Service;
 import TravelBooking.common.notification.EmailHotelService;
 import TravelBooking.common.notification.EmailService;
 import TravelBooking.features.booking.dto.request.BookingHotelRequest;
+import TravelBooking.features.booking.dto.request.BookingTourRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
+import TravelBooking.features.booking.dto.response.BookingResponse;
 import TravelBooking.features.booking.entity.Booking;
+import TravelBooking.features.booking.entity.BookingStatus;
 import TravelBooking.features.booking.repository.BookingRepository;
 import TravelBooking.features.hotel.entity.Hotel;
 import TravelBooking.features.hotel.repository.HotelRepository;
@@ -49,19 +52,27 @@ public class BookingServiceImpl implements BookingService {
     private HotelRepository hotelRepository;
 
     @Override
-    public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
+    public List<BookingResponse> getAllBookings() {
+        return bookingRepository.findAll().stream().map(this::mapToResponse).toList();
     }
 
     @Override
-    public List<Booking> findByUserId(Long userId) {
-        return bookingRepository.findByUserId(userId);
+    public List<BookingResponse> findByUserId(Long userId) {
+        return bookingRepository.findByUserId(userId).stream().map(this::mapToResponse).toList();
     }
 
     @Override
-    public Booking findByBookingId(Long id) {
-        return bookingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy tour này"));
+    public BookingResponse findByBookingId(Long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với id: " + id));
+        return mapToResponse(booking);
+    }
+
+    @Override
+    public List<BookingResponse> getMyBookings(String username) {
+        return bookingRepository.findByUser_Username(username).stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
     @Transactional
@@ -70,7 +81,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
 
-        String newStatus = request.getStatus();
+        BookingStatus newStatus = request.getStatus();
 
         if (newStatus != null) {
             booking.setStatus(newStatus);
@@ -102,10 +113,10 @@ public class BookingServiceImpl implements BookingService {
             Optional<Booking> bookingOtp = bookingRepository.findById(Id);
             if (bookingOtp.isPresent()) {
                 Booking booking = bookingOtp.get();
-                String status = booking.getStatus();
+                BookingStatus status = booking.getStatus();
 
-                if ("Pending".equalsIgnoreCase(status) || "Đang chờ".equalsIgnoreCase(status)) {
-                    booking.setStatus("CONFIRMED");
+                if (BookingStatus.PENDING.equals(status)) {
+                    booking.setStatus(BookingStatus.CONFIRMED);
                     bookingRepository.save(booking);
 
                     String htmlResponse = "<html><body style='text-align:center; padding:50px; font-family:Arial;'>"
@@ -136,36 +147,45 @@ public class BookingServiceImpl implements BookingService {
     // Đặt tour
     @Transactional
     @Override
-    public Map<String, Object> createBooking(Booking booking) {
+    public Map<String, Object> createBooking(BookingTourRequest booking, String username) {
 
-        if (booking.getTour() == null || booking.getTour().getId() == null) {
+        Booking bookingResult = new Booking();
+        if (booking.getTourId() == null) {
             throw new RuntimeException("Lỗi : phải chọn tour hợp lệ");
         }
-        if (booking.getUser() == null || booking.getUser().getId() == null) {
-            throw new RuntimeException("Lỗi : phải có user");
-        }
 
-        Tour tour = tourRepository.findById(booking.getTour().getId())
+        Tour tour = tourRepository.findById(booking.getTourId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy Tour với ID này!"));
-        booking.setTour(tour);
+        bookingResult.setTour(tour);
 
-        User user = userRepository.findById(booking.getUser().getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy User với ID này!"));
-        booking.setUser(user);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Người dùng chưa đăng nhập!"));
+        bookingResult.setUser(user);
 
-        Booking savedBooking = bookingRepository.save(booking);
+        bookingResult.setNumPeople(booking.getNumPeople());
+        bookingResult.setBookingDate(booking.getBookingDate());
+        bookingResult.setCustomerName(booking.getCustomerName());
+        bookingResult.setCustomerPhone(booking.getCustomerPhone());
+        bookingResult.setNote(booking.getNote());
+        bookingResult.setTotalPrice(tour.getPrice() * booking.getNumPeople());
+        bookingResult.setStatus(BookingStatus.PENDING);
 
-        if (savedBooking.getUser() != null && savedBooking.getUser().getEmail() != null) {
-            emailService.sendHtmlEmail(
-                    savedBooking.getUser().getEmail(),
-                    "Xác nhận đơn đặt tour " + savedBooking.getId(),
-                    savedBooking.getUser().getUsername(),
-                    savedBooking.getTour().getTitle(),
-                    savedBooking.getBookingDate().toString(),
-                    savedBooking.getNumPeople(),
-                    savedBooking.getTotalPrice(),
-                    savedBooking.getId());
+        Booking savedBooking = bookingRepository.save(bookingResult);
 
+        try {
+            if (savedBooking.getUser() != null && savedBooking.getUser().getEmail() != null) {
+                emailService.sendHtmlEmail(
+                        savedBooking.getUser().getEmail(),
+                        "Xác nhận đơn đặt tour " + savedBooking.getId(),
+                        savedBooking.getUser().getUsername(),
+                        savedBooking.getTour().getTitle(),
+                        savedBooking.getBookingDate().toString(),
+                        savedBooking.getNumPeople(),
+                        savedBooking.getTotalPrice(),
+                        savedBooking.getId());
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi gửi mail xác nhận booking: " + e.getMessage());
         }
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("message", "Đặt tour thành công");
@@ -224,7 +244,7 @@ public class BookingServiceImpl implements BookingService {
                     Booking booking = bookingOpt.get();
 
                     // 5. Cập nhật trạng thái thành ĐÃ THANH TOÁN (PAID)
-                    booking.setStatus("PAID");
+                    booking.setStatus(BookingStatus.PAID);
                     bookingRepository.save(booking);
 
                     System.out.println(">>> Đã cập nhật thành công trạng thái thanh toán cho Booking ID: " + bookingId);
@@ -264,6 +284,24 @@ public class BookingServiceImpl implements BookingService {
             System.out.println(">>> Lỗi parse ID từ nội dung: " + description);
             return null;
         }
+    }
+
+    private BookingResponse mapToResponse(Booking booking) {
+        BookingResponse res = new BookingResponse();
+        res.setId(booking.getId());
+        if (booking.getTour() != null) {
+            res.setTourId(booking.getTour().getId());
+            res.setTourTitle(booking.getTour().getTitle());
+            res.setTourImage(booking.getTour().getImage()); // hoặc imageUrl tùy trường trong Tour
+        }
+        res.setBookingDate(booking.getBookingDate());
+        res.setNumPeople(booking.getNumPeople());
+        res.setTotalPrice(booking.getTotalPrice());
+        res.setStatus(booking.getStatus());
+        res.setCustomerName(booking.getCustomerName());
+        res.setCustomerPhone(booking.getCustomerPhone());
+        res.setNote(booking.getNote());
+        return res;
     }
 
 }

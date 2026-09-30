@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import TravelBooking.repository.UserRepository;
+import TravelBooking.features.user.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -20,9 +20,6 @@ public class EmailService {
 
     @Autowired
     private TemplateEngine templateEngine;
-
-    @Autowired
-    private UserRepository userRepository;
 
     // Hàm gửi email HTML
     @Async

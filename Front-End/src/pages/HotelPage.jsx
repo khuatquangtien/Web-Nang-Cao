@@ -34,8 +34,9 @@ const HotelPage = () => {
     try {
       const response = await fetch(`${BASE_URL}/hotels/featuresHotels`);
       if (response.ok) {
-        const data = await response.json();
-        setHotels(data);
+        const resJson = await response.json();
+        const list = resJson && resJson.data ? resJson.data : (Array.isArray(resJson) ? resJson : []);
+        setHotels(list);
       } else {
         console.error("Không thể lấy dữ liệu khách sạn nổi bật");
       }

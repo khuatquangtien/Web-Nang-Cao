@@ -23,15 +23,38 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
+    <nav className="navbar navbar-expand-lg sticky-top py-3 glass-effect" style={{ borderBottom: "1px solid rgba(226, 232, 240, 0.8)", boxShadow: "var(--shadow-sm)" }}>
       <div className="container">
         {/* LOGO */}
-        <Link className="navbar-brand fw-bold text-primary fs-3" to="/">
-          HTH Travel
+        <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
+          <div style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "12px",
+            background: "linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontSize: "1.2rem",
+            boxShadow: "var(--shadow-glow)"
+          }}>
+            <i className="bi bi-compass"></i>
+          </div>
+          <span style={{
+            fontWeight: "800",
+            fontSize: "1.5rem",
+            letterSpacing: "-0.5px",
+            background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}>
+            HTH Travel
+          </span>
         </Link>
 
         <button
-          className="navbar-toggler"
+          className="navbar-toggler border-0 shadow-none"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -40,23 +63,24 @@ const Header = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 fw-medium">
-            <li className="nav-item ms-3">
-              <Link className="nav-link text-dark" to="/hotel">
-                Khách sạn
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 fw-semibold ms-lg-4 gap-2">
+            <li className="nav-item">
+              <Link className="nav-link px-3 py-2 rounded-pill text-secondary-emphasis" to="/hotel" style={{ transition: "var(--transition-fast)" }}>
+                <i className="bi bi-building me-1"></i> Khách sạn
               </Link>
             </li>
-            <li className="nav-item ms-3">
-              <Link className="nav-link text-dark" to="#" title="Tính năng đang phát triển">
-                Vé máy bay
+            <li className="nav-item">
+              <Link className="nav-link px-3 py-2 rounded-pill text-secondary-emphasis" to="/home" style={{ transition: "var(--transition-fast)" }}>
+                <i className="bi bi-geo-alt me-1"></i> Tour du lịch
               </Link>
             </li>
-            <li className="nav-item ms-3">
-              <Link className="nav-link text-primary fw-bold" to="/home">
-                Tour du lịch
+            <li className="nav-item">
+              <Link className="nav-link px-3 py-2 rounded-pill text-muted opacity-75" to="#" title="Tính năng đang phát triển">
+                <i className="bi bi-airplane me-1"></i> Vé máy bay
               </Link>
             </li>
           </ul>
+
 
           {/* --- KHU VỰC TÀI KHOẢN --- */}
           <div className="d-flex align-items-center gap-3">

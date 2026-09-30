@@ -5,6 +5,7 @@ import java.util.Map;
 
 import TravelBooking.features.user.dto.request.LoginRequest;
 import TravelBooking.features.user.dto.request.ResetPasswordRequest;
+import TravelBooking.features.user.dto.response.UserResponse;
 import TravelBooking.features.user.entity.User;
 
 public interface UserService {
@@ -13,16 +14,15 @@ public interface UserService {
 
     public void resetPassWord(String otp, String email, String newPassword);
 
-    // đăng kí
-    public Map<String, Object> register(User user);
+    public UserResponse register(TravelBooking.features.user.dto.request.RegisterRequest request);
 
-    // Đăng nhập
-    public Map<String, Object> login(LoginRequest request);
+    public TravelBooking.features.user.dto.response.LoginResponse login(LoginRequest request);
 
-    public List<User> getAllUsers();
+    public List<TravelBooking.features.user.dto.response.UserResponse> getAllUsers();
 
-    public User getUserById(Long id);
+    public TravelBooking.features.user.dto.response.UserResponse getUserById(Long id);
 
-    public User updateUser(Long id, User userDetails);
+    public TravelBooking.features.user.dto.response.UserResponse updateUser(Long id,
+            TravelBooking.features.user.dto.request.UpdateUserRequest userDetails);
 
 }

@@ -12,6 +12,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     // Sau này bạn có thể tìm booking theo user:
     List<Booking> findByUserId(Long userId);
 
+    List<Booking> findByUser_Username(String username);
+
     // số lượng đặt tour theo từng tour
     Integer countByTourId(Integer num);
 
