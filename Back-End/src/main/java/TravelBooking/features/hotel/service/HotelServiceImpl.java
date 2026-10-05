@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +26,8 @@ public class HotelServiceImpl implements HotelService {
     BookingRepository bookingRepository;
 
     @Override
-    public List<Hotel> getAllHotel() {
-        return hotelRepository.findAll();
+    public Page<Hotel> getAllHotel(Pageable pageable) {
+        return hotelRepository.findAll(pageable);
     }
 
     @Override
@@ -40,8 +42,8 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<Hotel> getAllPopularHotel() {
-        return hotelRepository.findTop5ByOrderByAverageRatingDesc();
+    public Page<Hotel> getAllPopularHotel(Pageable pageable) {
+        return hotelRepository.findTop5ByOrderByAverageRatingDesc(pageable);
     }
 
     @Transactional

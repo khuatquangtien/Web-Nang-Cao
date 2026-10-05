@@ -1,19 +1,20 @@
 package TravelBooking.features.hotel.service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import TravelBooking.features.hotel.entity.Hotel;
 
 public interface HotelService {
-    List<Hotel> getAllHotel();
+    Page<Hotel> getAllHotel(Pageable pageable);
 
     List<Hotel> searchHotel(String keyword);
 
     Hotel getHotelById(Long id);
 
-    List<Hotel> getAllPopularHotel();
+    Page<Hotel> getAllPopularHotel(Pageable pageable);
 
     void deleteHotel(Long id);
 

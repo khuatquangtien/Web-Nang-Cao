@@ -9,6 +9,8 @@ import javax.swing.text.html.parser.Entity;
 
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,8 +54,8 @@ public class BookingServiceImpl implements BookingService {
     private HotelRepository hotelRepository;
 
     @Override
-    public List<BookingResponse> getAllBookings() {
-        return bookingRepository.findAll().stream().map(this::mapToResponse).toList();
+    public Page<BookingResponse> getAllBookings(Pageable pageable) {
+        return bookingRepository.findAll(pageable).map(this::mapToResponse);
     }
 
     @Override
@@ -154,9 +156,19 @@ public class BookingServiceImpl implements BookingService {
             throw new RuntimeException("Lỗi : phải chọn tour hợp lệ");
         }
 
-        Tour tour = tourRepository.findById(booking.getTourId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy Tour với ID này!"));
-        bookingResult.setTour(tour);
+        Tour tour = tourRepository.findById(booking.getTourId()).get();
+        // Kiểm tra số lượng người
+        if (booking.getNumPeople() == null || booking.getNumPeople() <= 0) {
+            throw new RuntimeException("Số lượng người tham gia phải từ 1 người trở lên!");
+        }
+        if (tour.getMaxGroupSize() != null && booking.getNumPeople() > tour.getMaxGroupSize()) {
+            throw new RuntimeException(
+                    "Số người vượt quá sức chứa tối đa của tour (" + tour.getMaxGroupSize() + " người)!");
+        }
+        // Kiểm tra ngày khởi hành không được ở quá khứ
+        if (booking.getBookingDate() == null || booking.getBookingDate().isBefore(java.time.LocalDate.now())) {
+            throw new RuntimeException("Ngày khởi hành không hợp lệ (không được chọn ngày trong quá khứ)!");
+        }
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Người dùng chưa đăng nhập!"));

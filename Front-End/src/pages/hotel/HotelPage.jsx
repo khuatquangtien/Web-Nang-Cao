@@ -1,75 +1,77 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { tourService } from "../../services/tourService";
+import { useNavigate } from "react-router-dom";
+import { hotelService } from "../../services/hotelService";
 import BackButton from "../../components/common/BackButton";
 import Pagination from "../../components/common/Pagination";
+import { BASE_URL } from "../../utils/config";
 
-const TourPage = () => {
-  const [tours, setTours] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+const HotelPage = () => {
+  const [hotels, setHotels] = useState([]); // Danh sách toàn bộ khách sạn
+  const [searchQuery, setSearchQuery] = useState(""); // Từ khóa tìm kiếm
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  // --- LOGIC PHÂN TRANG TOUR BACKEND ---
+  // --- LOGIC PHÂN TRANG KHÁCH SẠN BACKEND ---
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const toursPerPage = 6;
+  const hotelsPerPage = 6; // 6 khách sạn (2 hàng x 3 cột)
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // 1. Tự động lấy tour theo trang khi vào trang hoặc chuyển trang
+  // 1. Tự động gọi API lấy khách sạn theo trang
   useEffect(() => {
     if (!searchQuery.trim()) {
-      fetchTours(currentPage);
+      fetchAllHotels(currentPage);
     }
   }, [currentPage]);
 
-  const fetchTours = async (page = 1) => {
+  const fetchAllHotels = async (page = 1) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await tourService.getAll({ page: page - 1, size: toursPerPage });
+      const res = await hotelService.getAll({ page: page - 1, size: hotelsPerPage });
       const pageData = res.data?.data;
       if (pageData && pageData.items) {
-        setTours(pageData.items);
+        setHotels(pageData.items);
         setTotalPages(pageData.totalPages || 1);
-      } else if (Array.isArray(res.data?.data)) {
-        setTours(res.data.data);
+      } else if (Array.isArray(pageData)) {
+        setHotels(pageData);
         setTotalPages(1);
       } else if (Array.isArray(res.data)) {
-        setTours(res.data);
+        setHotels(res.data);
         setTotalPages(1);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Lỗi kết nối API lấy danh sách khách sạn:", err);
       setError("Không thể kết nối đến Server!");
     } finally {
       setLoading(false);
     }
   };
 
-  // 2. Xử lý tìm kiếm Tour theo từ khóa
+  // 2. Tìm kiếm khách sạn theo từ khóa
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) {
       setCurrentPage(1);
-      fetchTours(1);
+      fetchAllHotels(1);
       return;
     }
 
     setLoading(true);
     setError(null);
     try {
-      const res = await tourService.search(searchQuery.trim());
+      const res = await hotelService.search(searchQuery.trim());
       const list = res.data?.data || res.data || [];
-      setTours(Array.isArray(list) ? list : []);
+      setHotels(Array.isArray(list) ? list : []);
       setTotalPages(1);
       setCurrentPage(1);
     } catch (err) {
-      console.error(err);
-      setError("Lỗi khi tìm kiếm tour du lịch!");
+      console.error("Lỗi kết nối API tìm kiếm:", err);
+      setError("Không thể kết nối đến Server!");
     } finally {
       setLoading(false);
     }
@@ -82,7 +84,7 @@ const TourPage = () => {
         <BackButton label="Quay lại" fallback="/home" />
       </div>
 
-      {/* 1. THANH TÌM KIẾM TOUR (Giống hệt khung tìm kiếm của trang Hotel) */}
+      {/* 1. THANH TÌM KIẾM KHÁCH SẠN */}
       <div className="card border-0 rounded-4 shadow-sm p-4 mb-4 bg-white">
         <form onSubmit={handleSearch} className="row g-3 align-items-center">
           <div className="col-md-9">
@@ -93,7 +95,7 @@ const TourPage = () => {
               <input
                 type="text"
                 className="form-control bg-light border-0 py-2"
-                placeholder="Tìm tour theo tên, địa điểm, thành phố (Đà Lạt, Sa Pa, Hạ Long...)"
+                placeholder="Tìm khách sạn theo tên, địa điểm, thành phố..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -120,60 +122,64 @@ const TourPage = () => {
         <div>
           <span
             className="badge px-3 py-1 rounded-pill mb-1"
-            style={{ background: "#e0e7ff", color: "#4338ca", fontWeight: "700" }}
+            style={{ background: "#ecfdf5", color: "#047857", fontWeight: "700" }}
           >
-            🌍 TẤT CẢ ĐIỂM ĐẾN
+            🏨 TẤT CẢ ĐIỂM NGHỈ DƯỠNG
           </span>
           <h3 className="fw-bold mb-0 text-dark" style={{ letterSpacing: "-0.5px" }}>
             {searchQuery
-              ? `Kết quả tìm kiếm cho "${searchQuery}" (${tours.length})`
-              : "Khám phá các hành trình mới"}
+              ? `Kết quả tìm kiếm cho "${searchQuery}" (${hotels.length})`
+              : "Danh sách tất cả khách sạn & chỗ nghỉ"}
           </h3>
         </div>
       </div>
 
       {/* 3. TRẠNG THÁI LOADING / ERROR */}
-      {loading && <p className="text-muted">Đang tải danh sách tour...</p>}
+      {loading && <p className="text-muted">Đang tải danh sách khách sạn...</p>}
       {error && <p className="text-danger">{error}</p>}
 
-      {/* 4. LƯỚI CARD TOUR HIỆN ĐẠI */}
-      {!loading && !error && tours.length > 0 && (
+      {/* 4. LƯỚI CARD KHÁCH SẠN */}
+      {!loading && !error && hotels.length > 0 && (
         <>
           <div className="row g-4">
-            {tours.map((tour) => (
-              <div className="col-md-6 col-xl-4" key={tour.id}>
+            {hotels.map((hotel) => (
+              <div className="col-md-6 col-xl-4" key={hotel.id}>
                 <div
                   className="card h-100 border-0 rounded-4 overflow-hidden bg-white shadow-sm"
                   style={{
-                    transition: "var(--transition-smooth, all 0.3s ease)"
+                    transition: "var(--transition-smooth, all 0.3s ease)",
+                    cursor: "pointer"
                   }}
+                  onClick={() => navigate(`/hotel/${hotel.id}`)}
                 >
                   <div className="position-relative overflow-hidden" style={{ height: "180px" }}>
-                    {tour.featured && (
+                    {hotel.is_active && (
                       <span
                         className="position-absolute top-0 end-0 m-2 badge px-2 py-1 rounded-pill fw-bold"
                         style={{
-                          background: "linear-gradient(135deg, #ef4444 0%, #f97316 100%)",
+                          background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                           color: "#fff",
                           zIndex: 2,
                           fontSize: "0.75rem"
                         }}
                       >
-                        🔥 Nổi bật
+                        Đang hoạt động
                       </span>
                     )}
                     <img
                       src={
-                        tour.image ||
-                        "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1"
+                        hotel.thumbnail_url
+                          ? hotel.thumbnail_url.startsWith("http")
+                            ? hotel.thumbnail_url
+                            : `${BASE_URL}${hotel.thumbnail_url}`
+                          : "https://images.unsplash.com/photo-1566073771259-6a8506099945"
                       }
                       className="w-100 h-100"
-                      alt={tour.title}
+                      alt={hotel.name}
                       style={{ objectFit: "cover" }}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src =
-                          "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1";
+                        e.target.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945";
                       }}
                     />
                   </div>
@@ -183,30 +189,27 @@ const TourPage = () => {
                       <div className="d-flex align-items-center justify-content-between text-muted small mb-1">
                         <div className="d-flex align-items-center gap-1 text-truncate" style={{ maxWidth: "70%" }}>
                           <i className="bi bi-geo-alt text-primary"></i>
-                          <span className="text-truncate">{tour.city || "Việt Nam"}</span>
+                          <span className="text-truncate">{hotel.address || "Việt Nam"}</span>
                         </div>
-                        {tour.averageRating && (
+                        {hotel.averageRating && (
                           <span className="fw-semibold text-warning d-flex align-items-center gap-1">
-                            ⭐ {tour.averageRating.toFixed(1)}
+                            ⭐ {hotel.averageRating.toFixed(1)}
                           </span>
                         )}
                       </div>
-                      <h6 className="card-title fw-bold text-dark text-truncate mb-3">{tour.title}</h6>
+                      <h6 className="card-title fw-bold text-dark text-truncate mb-3">{hotel.name}</h6>
                     </div>
 
                     <div className="d-flex align-items-center justify-content-between pt-2 border-top">
                       <div>
                         <small className="text-muted d-block" style={{ fontSize: "0.75rem" }}>Giá chỉ từ</small>
                         <span className="fw-bold text-primary">
-                          {tour.price ? `${tour.price.toLocaleString("vi-VN")} đ` : "Liên hệ"}
+                          {hotel.min_price ? `${hotel.min_price.toLocaleString("vi-VN")} đ` : "Liên hệ"}
                         </span>
                       </div>
-                      <Link
-                        to={`/tours/${tour.id}`}
-                        className="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold"
-                      >
-                        Chi tiết
-                      </Link>
+                      <button className="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold">
+                        Xem chi tiết
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -224,12 +227,11 @@ const TourPage = () => {
         </>
       )}
 
-      {/* 6. KHÔNG TÌM THẤY KẾT QUẢ */}
-      {!loading && !error && tours.length === 0 && (
-        <p className="text-muted">Không tìm thấy tour du lịch nào phù hợp.</p>
+      {!loading && !error && hotels.length === 0 && (
+        <p className="text-muted">Không tìm thấy khách sạn nào phù hợp.</p>
       )}
     </div>
   );
 };
 
-export default TourPage;
+export default HotelPage;

@@ -1,17 +1,19 @@
 package TravelBooking.features.tour.repository;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import TravelBooking.features.tour.entity.Tour;
 
-import java.util.List;
-
 @Repository
 public interface TourRepository extends JpaRepository<Tour, Long> {
 
     // 1. Lấy danh sách tour nổi bật
-    List<Tour> findByFeaturedTrue();
+    // List<Tour> findByFeaturedTrue();
 
     List<Tour> findByCityContainingIgnoreCase(String city);
 
@@ -19,5 +21,5 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
     // chung)
     List<Tour> findByTitleContainingIgnoreCase(String keyword);
 
-    //
+    Page<Tour> findByFeaturedTrue(Pageable pageable);
 }

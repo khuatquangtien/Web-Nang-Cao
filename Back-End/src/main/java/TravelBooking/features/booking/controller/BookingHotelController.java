@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import TravelBooking.common.dto.response.ApiResponse;
 import TravelBooking.common.notification.EmailHotelService;
 import TravelBooking.features.booking.dto.request.BookingHotelRequest;
 import TravelBooking.features.booking.service.BookingService;
@@ -25,10 +26,10 @@ public class BookingHotelController {
     private BookingService bookingService; // Gọi Repo khách sạn để lấy thông tin tên khách sạn
 
     @PostMapping("/book")
-    public ResponseEntity<?> bookHotel(@RequestBody BookingHotelRequest request) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> bookHotel(@RequestBody BookingHotelRequest request) {
 
         Map<String, Object> result = bookingService.bookHotel(request);
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(ApiResponse.success("Đặt khách sạn thành công", result));
     }
 }

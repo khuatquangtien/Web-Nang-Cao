@@ -1,15 +1,81 @@
-/* src/styles/booking.css */
-.booking__form {
-  padding: 20px;
-  border-radius: 5px;
-  background: #f9f9f9;
-  border: 1px solid #ddd;
+/* Booking Form Styles */
+.booking-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  padding: 24px;
+  transition: all 0.3s ease;
 }
 
-.booking__input input {
+.booking-card:hover {
+  box-shadow: 0 20px 35px -5px rgba(37, 99, 235, 0.12), 0 8px 10px -4px rgba(0, 0, 0, 0.04);
+}
+
+.booking-input-group .form-control {
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1.5px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.booking-input-group .form-control:focus {
+  border-color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.booking-input-group .input-group-text {
+  border-radius: 12px 0 0 12px;
+  background-color: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-right: none;
+  color: #64748b;
+}
+
+.booking-input-group .form-control.with-addon {
+  border-radius: 0 12px 12px 0;
+  border-left: none;
+}
+
+.booking-summary-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.btn-book-tour {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: none;
+  border-radius: 50px;
+  padding: 14px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  margin-bottom: 15px;
+}
+
+.btn-book-tour:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.45);
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  color: #ffffff;
+}
+
+.btn-book-tour:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-book-tour:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }

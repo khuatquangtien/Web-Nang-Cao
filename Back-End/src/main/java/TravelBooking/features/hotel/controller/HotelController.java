@@ -3,6 +3,7 @@ package TravelBooking.features.hotel.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import TravelBooking.common.dto.ApiResponse;
+import TravelBooking.common.dto.request.PaginationRequest;
+import TravelBooking.common.dto.response.ApiResponse;
+import TravelBooking.common.dto.response.PageResponse;
 import TravelBooking.features.hotel.entity.Hotel;
 import TravelBooking.features.hotel.service.HotelService;
 
@@ -28,9 +31,9 @@ public class HotelController {
 
 	// Lấy tất cả danh sách khách sạn
 	@GetMapping
-	public ResponseEntity<ApiResponse<List<Hotel>>> getAllHotel() {
-		List<Hotel> list = hotelService.getAllHotel();
-		return ResponseEntity.ok(ApiResponse.success(list));
+	public ResponseEntity<ApiResponse<PageResponse<Hotel>>> getAllHotel(PaginationRequest request) {
+		Page<Hotel> list = hotelService.getAllHotel(request.toPageable());
+		return ResponseEntity.ok(ApiResponse.<PageResponse<Hotel>>success(PageResponse.from(list)));
 	}
 
 	// Tìm kiếm theo từ khóa
@@ -49,9 +52,9 @@ public class HotelController {
 
 	// Lấy các khách sạn nổi bật
 	@GetMapping("/featuresHotels")
-	public ResponseEntity<ApiResponse<List<Hotel>>> getAllPopularHotel() {
-		List<Hotel> list = hotelService.getAllPopularHotel();
-		return ResponseEntity.ok(ApiResponse.success(list));
+	public ResponseEntity<ApiResponse<PageResponse<Hotel>>> getAllPopularHotel(PaginationRequest request) {
+		Page<Hotel> list = hotelService.getAllPopularHotel(request.toPageable());
+		return ResponseEntity.ok(ApiResponse.<PageResponse<Hotel>>success(PageResponse.from(list)));
 	}
 
 	// Xóa khách sạn (Admin)
@@ -75,4 +78,3 @@ public class HotelController {
 		return ResponseEntity.ok(ApiResponse.success("Cập nhật khách sạn thành công", updated));
 	}
 }
-

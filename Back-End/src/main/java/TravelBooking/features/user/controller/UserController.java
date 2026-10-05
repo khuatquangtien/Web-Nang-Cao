@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import TravelBooking.common.dto.ApiResponse;
+import TravelBooking.common.dto.response.ApiResponse;
 import TravelBooking.features.user.dto.request.LoginRequest;
 import TravelBooking.features.user.dto.request.RegisterRequest;
 import TravelBooking.features.user.dto.request.ResetPasswordRequest;

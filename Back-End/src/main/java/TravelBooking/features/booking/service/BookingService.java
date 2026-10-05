@@ -1,20 +1,19 @@
 package TravelBooking.features.booking.service;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import TravelBooking.features.booking.dto.request.BookingHotelRequest;
 import TravelBooking.features.booking.dto.request.BookingTourRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
 import TravelBooking.features.booking.dto.response.BookingResponse;
-import TravelBooking.features.booking.entity.Booking;
 
 public interface BookingService {
-    List<BookingResponse> getAllBookings();
+    Page<BookingResponse> getAllBookings(Pageable pageable);
 
     List<BookingResponse> findByUserId(Long userId);
 

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import TravelBooking.common.dto.ApiResponse;
+import TravelBooking.common.dto.request.PaginationRequest;
+import TravelBooking.common.dto.response.ApiResponse;
+import TravelBooking.common.dto.response.PageResponse;
 import TravelBooking.features.booking.dto.request.BookingTourRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
 import TravelBooking.features.booking.dto.response.BookingResponse;
@@ -33,7 +37,8 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Map<String, Object>>> createBooking(@RequestBody BookingTourRequest booking, Principal principal) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> createBooking(@RequestBody BookingTourRequest booking,
+            Principal principal) {
         String username = principal.getName();
         Map<String, Object> result = bookingService.createBooking(booking, username);
         return ResponseEntity.ok(ApiResponse.success("Đặt tour thành công", result));
@@ -41,8 +46,9 @@ public class BookingController {
 
     // lấy tất cả các danh sách
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BookingResponse>>> getAllBookings() {
-        return ResponseEntity.ok(ApiResponse.success(bookingService.getAllBookings()));
+    public ResponseEntity<ApiResponse<PageResponse<BookingResponse>>> getAllBookings(PaginationRequest request) {
+        Page<BookingResponse> list = bookingService.getAllBookings(request.toPageable());
+        return ResponseEntity.ok(ApiResponse.success(PageResponse.from(list)));
     }
 
     // Lịch sử tour

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import TravelBooking.features.tour.entity.Tour;
@@ -17,8 +19,8 @@ public class TourServiceImpl implements TourService {
     private TourRepository tourRepository;
 
     @Override
-    public List<Tour> getAllTours() {
-        return tourRepository.findAll();
+    public Page<Tour> getAllTours(Pageable pageable) {
+        return tourRepository.findAll(pageable);
     }
 
     @Transactional
@@ -33,8 +35,8 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public List<Tour> getFeaturedTours() {
-        return tourRepository.findByFeaturedTrue();
+    public Page<Tour> getFeaturedTours(Pageable pageable) {
+        return tourRepository.findByFeaturedTrue(pageable);
     }
 
     @Override

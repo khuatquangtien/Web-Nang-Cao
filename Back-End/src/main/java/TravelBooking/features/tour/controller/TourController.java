@@ -3,6 +3,10 @@ package TravelBooking.features.tour.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import TravelBooking.common.dto.ApiResponse;
+import TravelBooking.common.dto.request.PaginationRequest;
+import TravelBooking.common.dto.response.ApiResponse;
+import TravelBooking.common.dto.response.PageResponse;
 import TravelBooking.features.tour.entity.Tour;
 import TravelBooking.features.tour.service.TourService;
 
@@ -27,8 +33,9 @@ public class TourController {
 
     // 1. Lấy danh sách Tour
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Tour>>> getAllTours() {
-        return ResponseEntity.ok(ApiResponse.success(tourService.getAllTours()));
+    public ResponseEntity<ApiResponse<PageResponse<Tour>>> getAllTours(PaginationRequest request) {
+        Page<Tour> tourPage = tourService.getAllTours(request.toPageable());
+        return ResponseEntity.ok(ApiResponse.success("Lấy danh sách tour thành công", PageResponse.from(tourPage)));
     }
 
     // 2. Thêm Tour mới (Dành cho Admin)
@@ -46,8 +53,10 @@ public class TourController {
 
     // 4. Tìm kiếm lấy các tour nổi bật
     @GetMapping("/search/getFeaturedTours")
-    public ResponseEntity<ApiResponse<List<Tour>>> getFeaturedTours() {
-        return ResponseEntity.ok(ApiResponse.success(tourService.getFeaturedTours()));
+    public ResponseEntity<ApiResponse<PageResponse<Tour>>> getFeaturedTours(PaginationRequest request) {
+
+        Page<Tour> tourPage = tourService.getFeaturedTours(request.toPageable());
+        return ResponseEntity.ok(ApiResponse.success("Lấy danh sách tour nổi bật ", PageResponse.from(tourPage)));
     }
 
     // 5. Chi tiết 1 tour
@@ -70,4 +79,5 @@ public class TourController {
         Tour updated = tourService.updateTour(id, tourDetails);
         return ResponseEntity.ok(ApiResponse.success("Đã cập nhật tour thành công!", updated));
     }
-}
+
+}

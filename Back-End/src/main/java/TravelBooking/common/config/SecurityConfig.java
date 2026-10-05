@@ -37,18 +37,22 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Các API công khai (Không cần đăng nhập ai cũng xem được)
-                        .requestMatchers("/users/**").permitAll()
-                        .requestMatchers("/tours/**").permitAll()
-                        .requestMatchers("/hotels/**", "/featuresHotels").permitAll()
-                        .requestMatchers("/search/**").permitAll()
-                        .requestMatchers("/review/**").permitAll()
-                        .requestMatchers("/bookings/tour/confirm/**").permitAll()
-                        .requestMatchers("/api/payment/webhook").permitAll()
+                        // 1. Chỉ cho phép XEM tour và khách sạn công khai
+                        .requestMatchers(HttpMethod.GET, "/tours/**", "/hotels/**", "/search/**", "/review/**")
+                        .permitAll()
+                        // 2. Auth công khai: Đăng ký, đăng nhập, quên mật khẩu
+                        .requestMatchers("/users/login", "/users/register", "/users/forgetPass", "/users/resetPassword")
+                        .permitAll()
+                        .requestMatchers("/bookings/tour/confirm/**", "/api/payment/webhook").permitAll()
                         .requestMatchers("/api/admin/forecast/**", "/api/ai/**").permitAll()
-                        // 👇 CÁC API BẮT BUỘC ĐĂNG NHẬP (Phải có Token mới được gọi)
+                        // 3. Các thao tác Quản trị (Thêm/Sửa/Xóa Tour, Hotel, Xem danh sách User) chỉ
+                        // dành cho ADMIN
+                        .requestMatchers(HttpMethod.POST, "/tours/**", "/hotels/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/tours/**", "/hotels/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/tours/**", "/hotels/**").hasRole("ADMIN")
+                        .requestMatchers("/users", "/users/**").hasAnyRole("ADMIN", "USER")
+                        // 4. Đặt chỗ phải đăng nhập
                         .requestMatchers("/bookings/**").authenticated()
-                        // Mọi request còn lại
                         .anyRequest().authenticated())
                 // 👇 2. Đặt JwtFilter chạy trước UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
