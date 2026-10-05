@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,6 @@ import TravelBooking.common.dto.response.PageResponse;
 import TravelBooking.features.booking.dto.request.BookingTourRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
 import TravelBooking.features.booking.dto.response.BookingResponse;
-import TravelBooking.features.booking.entity.Booking;
 import TravelBooking.features.booking.service.BookingService;
 
 // Đặt tour
