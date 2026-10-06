@@ -17,8 +17,11 @@ import org.springframework.stereotype.Service;
 
 import TravelBooking.common.notification.EmailHotelService;
 import TravelBooking.common.notification.EmailService;
+import TravelBooking.features.Transport.entity.Transport;
+import TravelBooking.features.Transport.repository.TransportRepository;
 import TravelBooking.features.booking.dto.request.BookingHotelRequest;
 import TravelBooking.features.booking.dto.request.BookingTourRequest;
+import TravelBooking.features.booking.dto.request.BookingTransportRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
 import TravelBooking.features.booking.dto.response.BookingResponse;
 import TravelBooking.features.booking.entity.Booking;
@@ -52,6 +55,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private HotelRepository hotelRepository;
+
+    @Autowired
+    private TransportRepository transportRepository;
 
     @Override
     public Page<BookingResponse> getAllBookings(Pageable pageable) {
@@ -241,8 +247,6 @@ public class BookingServiceImpl implements BookingService {
             System.out.println("Dữ liệu nhận được: " + payload);
 
             // 2. Lấy nội dung chuyển khoản ra từ payload
-            // LƯU Ý: Chữ "description" có thể đổi thành "content" hoặc "memo" tùy vào bên
-            // thứ 3 bạn dùng
             String description = String.valueOf(payload.get("content"));
 
             // 3. Bóc tách ID đơn đặt tour từ nội dung chuyển khoản
@@ -282,6 +286,11 @@ public class BookingServiceImpl implements BookingService {
             result.put("status", "error");
             return result;
         }
+    }
+
+    @Override 
+    public Transport BookingTransport(BookingTransportRequest request, Long userId){
+        
     }
 
     private Long extractBookingIdFromDescription(String description) {

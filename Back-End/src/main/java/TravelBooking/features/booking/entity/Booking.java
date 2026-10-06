@@ -124,7 +124,6 @@ public class Booking {
         this.totalPrice = totalPrice;
     }
 
-    // 👇 --- GETTER SETTER MỚI --- 👇
     public String getCustomerName() {
         return customerName;
     }

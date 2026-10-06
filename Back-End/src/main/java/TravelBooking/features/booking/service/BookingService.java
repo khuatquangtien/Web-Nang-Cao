@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import TravelBooking.features.Transport.entity.Transport;
 import TravelBooking.features.booking.dto.request.BookingHotelRequest;
 import TravelBooking.features.booking.dto.request.BookingTourRequest;
+import TravelBooking.features.booking.dto.request.BookingTransportRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
 import TravelBooking.features.booking.dto.response.BookingResponse;
 
@@ -32,4 +34,7 @@ public interface BookingService {
     Map<String, Object> bookHotel(BookingHotelRequest request);
 
     Map<String, Object> receivePaymentWebhook(Map<String, Object> payload);
+
+    Transport BookingTransport(BookingTransportRequest request);
+
 }
