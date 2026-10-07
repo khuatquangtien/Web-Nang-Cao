@@ -211,5 +211,4 @@ Hướng phát triển
 • Hỗ trợ đa ngôn ngữ.
 • Tích hợp bản đồ và định vị du lịch.
 
-Giảng viên hướng dẫn
-Cấn Đức Điệp
+
