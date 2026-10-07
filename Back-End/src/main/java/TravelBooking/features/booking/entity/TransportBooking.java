@@ -1,10 +1,11 @@
-package TravelBooking.features.Transport.entity;
+package TravelBooking.features.booking.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.cglib.core.Local;
 
+import TravelBooking.features.Transport.entity.Transport;
 import TravelBooking.features.Transport.enums.TransportStatus;
 import TravelBooking.features.Transport.enums.TransportType;
 import TravelBooking.features.user.entity.User;
@@ -15,8 +16,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,11 +30,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class TransportBooking {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "Booing_Code", nullable = true)
-    private String bookingCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
@@ -53,12 +54,19 @@ public class TransportBooking {
     @Column(name = "end_date")
     private LocalDate endDate;
     @Column(name = "quantity")
-    private Long quantity;
-    @Column(name = "total_price")
-    private Long totalPrice;
+    private Integer quantity;
+
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
     @Enumerated(EnumType.STRING)
     private TransportStatus status;
+
+    @Column(name = "note", length = 1000)
+    private String note;
     @Column(name = "create_time")
     private LocalDateTime createTime;
 
+    @Column(name = "total_price")
+    private Long totalPrice;
 }

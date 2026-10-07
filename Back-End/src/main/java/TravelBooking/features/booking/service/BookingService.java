@@ -13,6 +13,7 @@ import TravelBooking.features.booking.dto.request.BookingTourRequest;
 import TravelBooking.features.booking.dto.request.BookingTransportRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
 import TravelBooking.features.booking.dto.response.BookingResponse;
+import TravelBooking.features.booking.dto.response.BookingTransportResponse;
 
 public interface BookingService {
     Page<BookingResponse> getAllBookings(Pageable pageable);
@@ -35,6 +36,6 @@ public interface BookingService {
 
     Map<String, Object> receivePaymentWebhook(Map<String, Object> payload);
 
-    Transport BookingTransport(BookingTransportRequest request);
+    BookingTransportResponse BookingTransport(BookingTransportRequest request);
 
 }

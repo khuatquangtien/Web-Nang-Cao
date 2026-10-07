@@ -1,5 +1,6 @@
 package TravelBooking.features.booking.service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,12 @@ import TravelBooking.features.booking.dto.request.BookingTourRequest;
 import TravelBooking.features.booking.dto.request.BookingTransportRequest;
 import TravelBooking.features.booking.dto.request.UpdateBooKingRequest;
 import TravelBooking.features.booking.dto.response.BookingResponse;
+import TravelBooking.features.booking.dto.response.BookingTransportResponse;
 import TravelBooking.features.booking.entity.Booking;
 import TravelBooking.features.booking.entity.BookingStatus;
+import TravelBooking.features.booking.entity.TransportBooking;
 import TravelBooking.features.booking.repository.BookingRepository;
+import TravelBooking.features.booking.repository.TransportBookingRespository;
 import TravelBooking.features.hotel.entity.Hotel;
 import TravelBooking.features.hotel.repository.HotelRepository;
 import TravelBooking.features.tour.entity.Tour;
@@ -58,6 +62,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private TransportRepository transportRepository;
+
+    @Autowired
+    private TransportBookingRespository transportBookingRepository;
 
     @Override
     public Page<BookingResponse> getAllBookings(Pageable pageable) {
@@ -288,9 +295,35 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    @Override 
-    public Transport BookingTransport(BookingTransportRequest request, Long userId){
-        
+    @Override
+    @Transactional
+    public BookingTransportResponse BookingTransport(BookingTransportRequest request) {
+        Transport transport = transportRepository.findById(request.getTransportId())
+                .orElseThrow(() -> new RuntimeException("phượng tiện không còn tồn tại"));
+        TransportBooking newBooking = new TransportBooking();
+        newBooking.setCreateTime(LocalDateTime.now());
+        newBooking.setCustomerEmail(request.getCustomerEmail());
+        newBooking.setCustomerName(request.getCustomerName());
+        newBooking.setEndDate(request.getEndDate());
+        newBooking.setStartDate(request.getStartDate());
+        newBooking.setQuantity(request.getQuantity());
+        newBooking.setPaymentMethod(request.getPaymentMethod());
+        newBooking.setNote(request.getNote());
+        newBooking.setTransport(transport);
+        newBooking.setStatus(request.getStatus());
+        newBooking.setTotalPrice(request.getTotalPrice());
+        TransportBooking saveBooking = transportBookingRepository.save(newBooking);
+
+        return convertToTransportResponse(saveBooking);
+
+    }
+
+    private BookingTransportResponse convertToTransportResponse(TransportBooking r) {
+        BookingTransportResponse response = new BookingTransportResponse();
+        response.setMess("Thuê xe thành công");
+        response.setTransport(r.getTransport());
+        return response;
+
     }
 
     private Long extractBookingIdFromDescription(String description) {
